@@ -23,19 +23,25 @@
   box-sizing: border-box;
 }
 
+/* Make app fill the viewport and disable scrollbars */
 html,
 body {
   margin: 0;
   padding: 0;
+  height: 100%;
+  width: 100%;
   background: radial-gradient(circle at top, #04151c 0, #010307 55%, #000000 100%);
   color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  overflow: hidden; /* no page scrollbar */
 }
 
-/* IMPORTANT: allow full-page scroll */
-body {
-  position: relative;
+/* Hide scrollbars in WebKit */
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 /* MATRIX BACKGROUND */
@@ -59,25 +65,28 @@ body {
   z-index: -1;
 }
 
-/* APP SHELL */
+/* APP SHELL: now spans full width & height with small padding */
 .app-shell {
   position: relative;
-  margin: 1.5rem auto;
-  max-width: 1600px; /* full-ish width; change to 100% if you want absolute full */
-  width: 100%;
-  border-radius: 18px;
-  border: 1px solid rgba(0, 255, 154, 0.12);
+  margin: 0;
+  padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+  width: 100vw;
+  height: 100vh;
+  border-radius: 0;
+  border: none;
   background: radial-gradient(circle at top left, #071b21 0, #020609 60%);
-  box-shadow: var(--shadow-soft);
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  /* no fixed height, no hidden overflow */
+  overflow: hidden; /* no scrollbars inside */
 }
 
 /* HEADER */
 .app-header {
-  padding: 0.9rem 1.4rem;
-  border-bottom: 1px solid rgba(0, 255, 154, 0.16);
+  flex: 0 0 auto;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 255, 154, 0.16);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -92,12 +101,12 @@ body {
 .logo-lockup {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.55rem;
 }
 
 .logo-mark {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 999px;
   border: 1px solid rgba(0, 255, 154, 0.7);
   display: flex;
@@ -105,28 +114,32 @@ body {
   justify-content: center;
   color: var(--accent);
   font-weight: 700;
-  font-size: 1.1rem;
-  box-shadow: 0 0 15px rgba(0, 255, 154, 0.6);
+  font-size: 1rem;
+  box-shadow: 0 0 12px rgba(0, 255, 154, 0.6);
 }
 
 .logo-title {
   font-weight: 600;
   letter-spacing: 0.04em;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
 }
 
 .logo-subtitle {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--muted);
 }
 
-/* MAIN LAYOUT */
+/* MAIN LAYOUT: fill remaining height, two panels side by side */
 .app-main {
+  flex: 1 1 auto;
+  margin-top: 0.6rem;
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.4fr);
   gap: var(--grid-gap);
-  padding: 1.2rem 1.4rem 1.4rem;
+  padding: 0;
+  height: calc(100% - 0.6rem);
+  min-height: 0; /* important to avoid overflow */
 }
 
 /* PANELS */
@@ -135,14 +148,15 @@ body {
   border-radius: var(--radius-lg);
   border: 1px solid rgba(0, 255, 154, 0.16);
   box-shadow: 0 10px 32px rgba(0, 0, 0, 0.85);
-  padding: 1.1rem 1.1rem 1.2rem;
+  padding: 0.8rem;
   display: flex;
   flex-direction: column;
+  min-height: 0; /* allow flexbox to shrink */
 }
 
 .panel-title {
-  margin: 0 0 0.75rem;
-  font-size: 0.95rem;
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--accent);
@@ -150,13 +164,17 @@ body {
 
 /* LEFT PANEL: FORM */
 .matrix-form {
-  /* let content grow; no inner scrolling */
+  flex: 1 1 auto;
+  min-height: 0;
+  padding-right: 0.2rem;
+  overflow: hidden; /* no scroll; we'll size form contents to fit */
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.7rem 0.8rem;
+  gap: 0.4rem 0.5rem;
+  font-size: 0.78rem;
 }
 
 .form-group {
@@ -169,9 +187,9 @@ body {
 }
 
 label {
-  font-size: 0.76rem;
+  font-size: 0.7rem;
   color: var(--muted);
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.1rem;
 }
 
 input,
@@ -181,8 +199,8 @@ textarea {
   color: var(--fg);
   border-radius: var(--radius-sm);
   border: 1px solid rgba(0, 255, 154, 0.22);
-  padding: 0.35rem 0.55rem;
-  font-size: 0.8rem;
+  padding: 0.25rem 0.45rem;
+  font-size: 0.75rem;
   outline: none;
 }
 
@@ -194,23 +212,24 @@ textarea:focus {
 }
 
 textarea {
-  resize: vertical;
-  min-height: 2.5rem;
+  resize: none; /* no resize -> keeps height stable */
+  min-height: 1.8rem;
+  max-height: 3rem;
 }
 
 .form-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-top: 0.8rem;
+  gap: 0.35rem;
+  margin-top: 0.45rem;
 }
 
 /* BUTTONS */
 .btn-primary,
 .btn-secondary,
 .btn-ghost {
-  font-size: 0.78rem;
-  padding: 0.4rem 0.8rem;
+  font-size: 0.72rem;
+  padding: 0.3rem 0.7rem;
   border-radius: 999px;
   border: 1px solid rgba(0, 255, 154, 0.4);
   cursor: pointer;
@@ -218,7 +237,8 @@ textarea {
   color: var(--fg);
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.2rem;
+  white-space: nowrap;
 }
 
 .btn-primary {
@@ -254,7 +274,6 @@ textarea {
   color: var(--accent);
 }
 
-/* Danger variant */
 .btn-danger {
   border-color: rgba(255, 77, 79, 0.8);
   color: var(--danger);
@@ -267,46 +286,50 @@ textarea {
 
 /* RIGHT PANEL: TABLE */
 .panel-header {
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
-  margin-bottom: 0.6rem;
+  gap: 0.35rem;
+  margin-bottom: 0.3rem;
 }
 
 .panel-controls {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.35rem;
 }
 
 .search-input {
   min-width: 0;
-  flex: 1 1 180px;
+  flex: 1 1 150px;
 }
 
 .filter-select {
-  width: 150px;
+  width: 130px;
 }
 
 .table-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.3rem;
 }
 
-/* Remove internal scroll; let page scroll */
 .table-wrapper {
+  flex: 1 1 auto;
+  min-height: 0;
   border-radius: var(--radius-md);
   border: 1px solid rgba(0, 255, 154, 0.18);
   background: radial-gradient(circle at top left, #07141a 0, #020609 60%);
+  overflow: hidden; /* no inner scrollbar */
 }
 
 /* TABLE */
 .matrix-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.78rem;
+  table-layout: fixed;
+  font-size: 0.72rem;
 }
 
 .matrix-table thead {
@@ -319,14 +342,17 @@ textarea {
 
 .matrix-table th,
 .matrix-table td {
-  padding: 0.45rem 0.6rem;
+  padding: 0.3rem 0.4rem;
   border-bottom: 1px solid rgba(0, 255, 154, 0.12);
   vertical-align: top;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .matrix-table th {
   text-align: left;
-  font-size: 0.74rem;
+  font-size: 0.68rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
@@ -349,10 +375,11 @@ tbody tr.selected-row {
   background: rgba(0, 100, 60, 0.9) !important;
 }
 
-/* Totals bar under the table */
+/* Totals bar under the table, fixed height */
 .totals-bar {
-  margin-top: 0.75rem;
-  padding: 0.75rem 1rem;
+  flex: 0 0 auto;
+  margin-top: 0.35rem;
+  padding: 0.5rem 0.7rem;
   border-radius: 6px;
   background: rgba(0, 255, 153, 0.06);
   border: 1px solid rgba(0, 255, 153, 0.4);
@@ -361,16 +388,16 @@ tbody tr.selected-row {
   justify-content: space-between;
   align-items: center;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
 }
 
 /* Badge styles */
 .badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.1rem 0.4rem;
+  padding: 0.1rem 0.35rem;
   border-radius: 999px;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   border: 1px solid transparent;
 }
 
@@ -389,10 +416,11 @@ tbody tr.selected-row {
   border: 1px solid var(--accent-muted);
   background: transparent;
   color: var(--accent);
-  padding: 0.2rem 0.5rem;
+  padding: 0.15rem 0.4rem;
   border-radius: 4px;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .details-btn:hover {
@@ -425,26 +453,30 @@ tbody tr.selected-row {
   background: var(--card-bg);
   border-radius: 10px;
   border: 1px solid var(--accent-muted);
-  padding: 1.25rem 1.5rem;
-  width: min(480px, 90vw);
+  padding: 0.9rem 1rem;
+  width: min(420px, 90vw);
+  max-height: 60vh;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
 }
 
 .modal-title {
-  margin-bottom: 0.75rem;
-  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
   color: var(--accent);
 }
 
 #details-notes {
   width: 100%;
-  margin-top: 0.25rem;
-  margin-bottom: 1rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.6rem;
   background: rgba(0, 0, 0, 0.4);
   border-radius: 6px;
   border: 1px solid var(--accent-muted);
   color: var(--fg);
-  resize: vertical;
+  resize: none;
+  min-height: 4rem;
+  max-height: 7rem;
 }
 
 .modal-close {
@@ -463,17 +495,21 @@ tbody tr.selected-row {
 .modal-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE (still no global scrollbars – panels just get smaller) */
 @media (max-width: 980px) {
   .app-main {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .panel-right {
-    margin-top: 0.8rem;
+    margin-top: 0.5rem;
+  }
+
+  .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -485,9 +521,5 @@ tbody tr.selected-row {
   .panel-controls {
     flex-direction: column;
     align-items: stretch;
-  }
-
-  .table-actions {
-    justify-content: flex-start;
   }
 }
