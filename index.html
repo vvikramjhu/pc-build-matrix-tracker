@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Matrix PC Build Tracker</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="matrix-bg"></div>
+
+  <header class="header">
+    <h1>Matrix PC Build Tracker</h1>
+    <p class="subtitle">“There is no spoon. Only warranties.”</p>
+  </header>
+
+  <main class="container">
+    <section class="panel panel-form">
+      <h2>Enter / Edit Part Details</h2>
+      <form id="part-form">
+        <div class="form-grid">
+          <label>
+            Category
+            <select name="Category" required>
+              <option value="">-- Select --</option>
+              <option>CPU</option>
+              <option>GPU</option>
+              <option>Motherboard</option>
+              <option>Memory</option>
+              <option>Storage</option>
+              <option>Power Supply</option>
+              <option>Case</option>
+              <option>Cooler</option>
+              <option>Fans</option>
+              <option>Monitor</option>
+              <option>OS / License</option>
+              <option>Peripheral</option>
+              <option>Other</option>
+            </select>
+          </label>
+
+          <label>
+            Part Name
+            <input type="text" name="PartName" placeholder="e.g. GeForce RTX 5090" required />
+          </label>
+
+          <label>
+            Model
+            <input type="text" name="Model" placeholder="e.g. ASUS ROG STRIX RTX 5090" />
+          </label>
+
+          <label>
+            Vendor Name
+            <input type="text" name="VendorName" placeholder="e.g. Newegg, Amazon, Micro Center" />
+          </label>
+
+          <label>
+            Vendor Website
+            <input type="url" name="VendorWebsite" placeholder="https://example.com" />
+          </label>
+
+          <label>
+            Vendor Login URL
+            <input type="url" name="VendorLoginURL" placeholder="https://example.com/login" />
+          </label>
+
+          <label>
+            Vendor Username
+            <input type="text" name="VendorUsername" placeholder="(no password here)" />
+          </label>
+
+          <label>
+            Vendor Password Hint
+            <input type="text" name="VendorPasswordHint" placeholder="Stored in password manager" />
+          </label>
+
+          <label>
+            Vendor Support Email
+            <input type="email" name="VendorSupportEmail" placeholder="support@example.com" />
+          </label>
+
+          <label>
+            Vendor Support Phone
+            <input type="text" name="VendorSupportPhone" placeholder="+1-800-123-4567" />
+          </label>
+
+          <label>
+            Purchase Date
+            <input type="date" name="PurchaseDate" />
+          </label>
+
+          <label>
+            Price Paid
+            <input type="number" step="0.01" name="PricePaid" placeholder="2499.99" />
+          </label>
+
+          <label>
+            Currency
+            <input type="text" name="Currency" placeholder="USD" />
+          </label>
+
+          <label>
+            Order ID
+            <input type="text" name="OrderID" placeholder="Store order number" />
+          </label>
+
+          <label>
+            Serial Number
+            <input type="text" name="SerialNumber" placeholder="From the box / product" />
+          </label>
+
+          <label>
+            Warranty Provider
+            <input type="text" name="WarrantyProvider" placeholder="e.g. ASUS, Corsair" />
+          </label>
+
+          <label>
+            Warranty Type
+            <input type="text" name="WarrantyType" placeholder="Manufacturer / Store / Third-Party" />
+          </label>
+
+          <label>
+            Warranty Registration URL
+            <input type="url" name="WarrantyRegistrationURL" placeholder="https://..." />
+          </label>
+
+          <label>
+            Warranty Length (months)
+            <input type="number" name="WarrantyLengthMonths" placeholder="36" />
+          </label>
+
+          <label>
+            Warranty Start Date
+            <input type="date" name="WarrantyStartDate" />
+          </label>
+
+          <label>
+            Warranty End Date
+            <input type="date" name="WarrantyEndDate" />
+          </label>
+
+          <label>
+            Warranty Support Email
+            <input type="email" name="WarrantySupportEmail" placeholder="warranty@example.com" />
+          </label>
+
+          <label>
+            Warranty Support Phone
+            <input type="text" name="WarrantySupportPhone" placeholder="+1-800-..." />
+          </label>
+
+          <label>
+            Extended Warranty Provider
+            <input type="text" name="ExtendedWarrantyProvider" placeholder="SquareTrade, Store plan, etc." />
+          </label>
+
+          <label>
+            Extended Warranty Length (months)
+            <input type="number" name="ExtendedWarrantyLengthMonths" placeholder="24" />
+          </label>
+
+          <label>
+            Extended Warranty Details
+            <input type="text" name="ExtendedWarrantyDetails" placeholder="2-year GPU accidental damage" />
+          </label>
+
+          <label>
+            Extended Warranty Support Email
+            <input type="email" name="ExtendedWarrantySupportEmail" placeholder="support@extended.com" />
+          </label>
+
+          <label>
+            Extended Warranty Support Phone
+            <input type="text" name="ExtendedWarrantySupportPhone" placeholder="+1-800-..." />
+          </label>
+        </div>
+
+        <label class="notes-label">
+          Notes
+          <textarea name="Notes" rows="3" placeholder="Anything important about this part or warranty..."></textarea>
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-primary">Add / Update (local)</button>
+          <button type="button" id="reset-form" class="btn-secondary">Clear Form</button>
+          <button type="button" id="download-csv" class="btn-ghost">
+            Download CSV Snapshot
+          </button>
+        </div>
+        <p class="hint">
+          Changes made here update the in-page data. To make them permanent, replace <code>data/pc_parts.csv</code>
+          in your repo with a new CSV (or edit it directly) and push to GitHub.
+        </p>
+      </form>
+    </section>
+
+    <section class="panel panel-table">
+      <div class="table-header">
+        <h2>Parts & Warranties</h2>
+        <div class="filters">
+          <input type="text" id="search-input" placeholder="Search (part, vendor, warranty provider)..." />
+          <select id="category-filter">
+            <option value="">All Categories</option>
+            <option>CPU</option>
+            <option>GPU</option>
+            <option>Motherboard</option>
+            <option>Memory</option>
+            <option>Storage</option>
+            <option>Power Supply</option>
+            <option>Case</option>
+            <option>Cooler</option>
+            <option>Fans</option>
+            <option>Monitor</option>
+            <option>OS / License</option>
+            <option>Peripheral</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table id="parts-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>Part</th>
+              <th>Vendor</th>
+              <th>Price</th>
+              <th>Warranty</th>
+              <th>Extended Warranty</th>
+              <th>Vendor Contact</th>
+              <th>Warranty Contact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Populated by app.js -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>Matrix Tracker • Data from <code>data/pc_parts.csv</code></span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
