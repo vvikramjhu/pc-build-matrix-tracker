@@ -14,12 +14,14 @@ function parseCSV(text) {
 
 let parts = [];
 let filteredParts = [];
+let selectedIndex = null; // index into `parts` of the currently selected item
 
 const tableBody = document.querySelector("#parts-table tbody");
 const searchInput = document.querySelector("#search-input");
 const categoryFilter = document.querySelector("#category-filter");
 const form = document.querySelector("#part-form");
 const resetFormBtn = document.querySelector("#reset-form");
+const deleteBtn = document.querySelector("#delete-part");
 const downloadCsvBtn = document.querySelector("#download-csv");
 
 async function loadData() {
@@ -40,7 +42,9 @@ async function loadData() {
 function formatPrice(p) {
   if (!p.PricePaid) return "";
   const cur = p.Currency || "USD";
-  return `${cur} ${parseFloat(p.PricePaid).toFixed(2)}`;
+  const num = Number.parseFloat(p.PricePaid);
+  if (Number.isNaN(num)) return `${cur} ${p.PricePaid}`;
+  return `${cur} ${num.toFixed(2)}`;
 }
 
 function summarizeWarranty(p) {
@@ -86,7 +90,10 @@ function renderTable() {
   }
 
   tableBody.innerHTML = filteredParts
-    .map((p, i) => {
+    .map((p) => {
+      const masterIndex = parts.indexOf(p);
+      const isSelected = masterIndex === selectedIndex;
+
       const vendor = p.VendorName || "";
       const vendorLink = p.VendorWebsite
         ? `<a href="${p.VendorWebsite}" target="_blank">${vendor || "Vendor site"}</a>`
@@ -106,7 +113,7 @@ function renderTable() {
       );
 
       return `
-        <tr data-index="${i}">
+        <tr data-index="${masterIndex}" class="${isSelected ? "selected-row" : ""}">
           <td>${cat}</td>
           <td>${partDisplay}</td>
           <td>${vendorLink || ""}</td>
@@ -147,7 +154,7 @@ function applyFilters() {
   renderTable();
 }
 
-// In-page add/update (does not persist back to CSV automatically)
+// Map form values to object
 function formToObject(formEl) {
   const data = new FormData(formEl);
   const obj = {};
@@ -157,14 +164,66 @@ function formToObject(formEl) {
   return obj;
 }
 
+// Populate form from a selected part
+function populateFormFromPart(part) {
+  const fields = [
+    "Category",
+    "PartName",
+    "Model",
+    "VendorName",
+    "VendorWebsite",
+    "VendorLoginURL",
+    "VendorUsername",
+    "VendorPasswordHint",
+    "VendorSupportEmail",
+    "VendorSupportPhone",
+    "PurchaseDate",
+    "PricePaid",
+    "Currency",
+    "OrderID",
+    "SerialNumber",
+    "WarrantyProvider",
+    "WarrantyType",
+    "WarrantyRegistrationURL",
+    "WarrantyLengthMonths",
+    "WarrantyStartDate",
+    "WarrantyEndDate",
+    "WarrantySupportEmail",
+    "WarrantySupportPhone",
+    "ExtendedWarrantyProvider",
+    "ExtendedWarrantyLengthMonths",
+    "ExtendedWarrantyDetails",
+    "ExtendedWarrantySupportEmail",
+    "ExtendedWarrantySupportPhone",
+    "Notes",
+  ];
+
+  fields.forEach((name) => {
+    const input = form.querySelector(`[name="${name}"]`);
+    if (!input) return;
+    input.value = part[name] || "";
+  });
+}
+
+function clearSelectionHighlight() {
+  tableBody.querySelectorAll("tr").forEach((row) => {
+    row.classList.remove("selected-row");
+  });
+}
+
+// Download current in-memory data as CSV
 function downloadCsvSnapshot() {
   if (!parts.length) return;
   const headers = Object.keys(parts[0]);
   const rows = [
     headers.join(","),
-    ...parts.map((p) => headers.map((h) => (p[h] || "").replace(/,/g, " ")).join(",")),
+    ...parts.map((p) =>
+      headers.map((h) => (p[h] || "").replace(/,/g, " ")).join(",")
+    ),
   ];
-  const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob([rows.join("\n")], {
+    type: "text/csv;charset=utf-8;",
+  });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
@@ -176,39 +235,78 @@ function downloadCsvSnapshot() {
 }
 
 // Event listeners
+
+// Click on table row -> select + populate form
+tableBody.addEventListener("click", (e) => {
+  const tr = e.target.closest("tr");
+  if (!tr || !tr.dataset.index) return;
+
+  const idx = Number.parseInt(tr.dataset.index, 10);
+  if (Number.isNaN(idx) || !parts[idx]) return;
+
+  selectedIndex = idx;
+  clearSelectionHighlight();
+  tr.classList.add("selected-row");
+  populateFormFromPart(parts[idx]);
+});
+
 searchInput.addEventListener("input", applyFilters);
 categoryFilter.addEventListener("change", applyFilters);
 
+// Save (Add / Update)
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const obj = formToObject(form);
 
-  // If a part with same Category + PartName + Model exists, update it; else add new
-  const idx = parts.findIndex(
-    (p) =>
-      p.Category === obj.Category &&
-      p.PartName === obj.PartName &&
-      p.Model === obj.Model
-  );
-  if (idx >= 0) {
-    parts[idx] = { ...parts[idx], ...obj };
+  if (selectedIndex !== null && parts[selectedIndex]) {
+    // Update currently selected part
+    parts[selectedIndex] = { ...parts[selectedIndex], ...obj };
   } else {
-    // Ensure all known headers exist so CSV export works cleanly
-    if (parts.length) {
-      const headers = Object.keys(parts[0]);
-      headers.forEach((h) => {
-        if (!(h in obj)) obj[h] = "";
-      });
+    // No row selected: try match by Category + PartName + Model, else add new
+    const idx = parts.findIndex(
+      (p) =>
+        p.Category === obj.Category &&
+        p.PartName === obj.PartName &&
+        p.Model === obj.Model
+    );
+    if (idx >= 0) {
+      parts[idx] = { ...parts[idx], ...obj };
+      selectedIndex = idx;
+    } else {
+      if (parts.length) {
+        const headers = Object.keys(parts[0]);
+        headers.forEach((h) => {
+          if (!(h in obj)) obj[h] = "";
+        });
+      }
+      parts.push(obj);
+      selectedIndex = parts.length - 1;
     }
-    parts.push(obj);
   }
+
   applyFilters();
 });
 
+// New / Clear
 resetFormBtn.addEventListener("click", () => {
   form.reset();
+  selectedIndex = null;
+  clearSelectionHighlight();
 });
 
+// Delete Selected
+deleteBtn.addEventListener("click", () => {
+  if (selectedIndex === null || !parts[selectedIndex]) return;
+  const ok = window.confirm("Delete the selected part from the list?");
+  if (!ok) return;
+
+  parts.splice(selectedIndex, 1);
+  selectedIndex = null;
+  form.reset();
+  applyFilters();
+});
+
+// Download CSV snapshot
 downloadCsvBtn.addEventListener("click", downloadCsvSnapshot);
 
 // Load CSV on startup
