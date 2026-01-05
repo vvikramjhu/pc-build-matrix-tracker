@@ -352,7 +352,7 @@ textarea {
 }
 
 /* ========================================
-   TABLE: resizable columns
+   TABLE: resizable columns with wrapping text
    ======================================== */
 .matrix-table {
   width: 100%;
@@ -385,14 +385,62 @@ textarea {
   resize: horizontal; /* enables column resizing in some browsers */
 }
 
+/* Default table cell styling */
 .matrix-table th,
 .matrix-table td {
   padding: 0.3rem 0.4rem;
   border-bottom: 1px solid rgba(0, 255, 154, 0.12);
   vertical-align: top;
+}
+
+/* Category column: normal font size, no wrap */
+.matrix-table .col-category {
+  font-size: 0.72rem;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* Price column: normal font size, no wrap */
+.matrix-table .col-price {
+  font-size: 0.72rem;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Small columns: smaller font (7-8px equivalent = 0.5rem), wrapping enabled */
+.matrix-table .col-small {
+  font-size: 0.5rem; /* ~8px on most browsers */
+  white-space: normal; /* allow wrapping */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.3;
+}
+
+/* Apply small font to tbody cells in small columns */
+.matrix-table tbody td:nth-child(2), /* Part */
+.matrix-table tbody td:nth-child(3), /* Vendor */
+.matrix-table tbody td:nth-child(5), /* Warranty */
+.matrix-table tbody td:nth-child(6), /* Ext. Warranty */
+.matrix-table tbody td:nth-child(7), /* Vendor Contact */
+.matrix-table tbody td:nth-child(8)  /* Warranty Contact */
+{
+  font-size: 0.5rem; /* ~8px */
+  white-space: normal; /* allow wrapping */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.3;
+}
+
+/* Category and Price columns keep normal size */
+.matrix-table tbody td:nth-child(1), /* Category */
+.matrix-table tbody td:nth-child(4)  /* Price */
+{
+  font-size: 0.72rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .matrix-table tbody tr {
@@ -450,7 +498,7 @@ tbody tr.selected-row {
   align-items: center;
   padding: 0.1rem 0.35rem;
   border-radius: 999px;
-  font-size: 0.65rem;
+  font-size: 0.45rem; /* smaller badge text for small columns */
   border: 1px solid transparent;
 }
 
