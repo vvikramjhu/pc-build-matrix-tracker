@@ -1,255 +1,324 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="UTF-8" />
     <title>Matrix PC Build Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="styles.css" />
-</head>
-
-<body>
+  </head>
+  <body>
     <div class="matrix-bg"></div>
 
-    <header class="header">
-        <h1>Matrix PC Build Tracker</h1>
-        <p class="subtitle">“There is no spoon. Only warranties.”</p>
-    </header>
+    <div class="app-shell">
+      <header class="app-header">
+        <div class="logo-lockup">
+          <div class="logo-mark">λ</div>
+          <div class="logo-text">
+            <div class="logo-title">Matrix PC Build Tracker</div>
+            <div class="logo-subtitle">
+              Components • Vendors • Warranties • Extended Coverage
+            </div>
+          </div>
+        </div>
+      </header>
 
-    <main class="container">
-        <section class="panel panel-form">
-            <h2>Enter / Edit Part Details</h2>
-            <form id="part-form">
-                <div class="form-grid">
-                    <label>
-                        Category
-                        <select name="Category" required>
-                            <option value="">-- Select --</option>
-                            <option>CPU</option>
-                            <option>GPU</option>
-                            <option>Motherboard</option>
-                            <option>Memory</option>
-                            <option>Storage</option>
-                            <option>Power Supply</option>
-                            <option>Case</option>
-                            <option>Cooler</option>
-                            <option>Fans</option>
-                            <option>Monitor</option>
-                            <option>OS / License</option>
-                            <option>Peripheral</option>
-                            <option>Other</option>
-                        </select>
-                    </label>
+      <main class="app-main">
+        <!-- LEFT: FORM -->
+        <section class="panel panel-left">
+          <h2 class="panel-title">Part &amp; Warranty Editor</h2>
+          <form id="part-form" class="matrix-form">
+            <div class="form-grid">
+              <!-- Only PartName is really required; others can be blank (will be filled as dummy_... on save) -->
+              <div class="form-group">
+                <label for="Category">Category</label>
+                <input id="Category" name="Category" placeholder="CPU, GPU, etc." />
+              </div>
 
-                    <label>
-                        Part Name
-                        <input type="text" name="PartName" placeholder="e.g. GeForce RTX 5090" required />
-                    </label>
+              <div class="form-group">
+                <label for="PartName">Part Name *</label>
+                <input
+                  id="PartName"
+                  name="PartName"
+                  placeholder="e.g. AMD Ryzen 9 9950X3D"
+                  required
+                />
+              </div>
 
-                    <label>
-                        Model
-                        <input type="text" name="Model" placeholder="e.g. ASUS ROG STRIX RTX 5090" />
-                    </label>
+              <div class="form-group">
+                <label for="Model">Model</label>
+                <input
+                  id="Model"
+                  name="Model"
+                  placeholder="Model / Capacity / Extra descriptor"
+                />
+              </div>
 
-                    <label>
-                        Vendor Name
-                        <input type="text" name="VendorName" placeholder="e.g. Newegg, Amazon, Micro Center" />
-                    </label>
+              <div class="form-group">
+                <label for="VendorName">Vendor Name</label>
+                <input id="VendorName" name="VendorName" placeholder="Amazon, Newegg..." />
+              </div>
 
-                    <label>
-                        Vendor Website
-                        <input type="url" name="VendorWebsite" placeholder="https://example.com" />
-                    </label>
+              <div class="form-group">
+                <label for="VendorWebsite">Vendor Website</label>
+                <input
+                  id="VendorWebsite"
+                  name="VendorWebsite"
+                  placeholder="https://..."
+                />
+              </div>
 
-                    <label>
-                        Vendor Login URL
-                        <input type="url" name="VendorLoginURL" placeholder="https://example.com/login" />
-                    </label>
+              <div class="form-group">
+                <label for="VendorLoginURL">Vendor Login URL</label>
+                <input
+                  id="VendorLoginURL"
+                  name="VendorLoginURL"
+                  placeholder="Login page URL"
+                />
+              </div>
 
-                    <label>
-                        Vendor Username
-                        <input type="text" name="VendorUsername" placeholder="(no password here)" />
-                    </label>
+              <div class="form-group">
+                <label for="VendorUsername">Vendor Username</label>
+                <input id="VendorUsername" name="VendorUsername" />
+              </div>
 
-                    <label>
-                        Vendor Password Hint
-                        <input type="text" name="VendorPasswordHint" placeholder="Stored in password manager" />
-                    </label>
+              <div class="form-group">
+                <label for="VendorPasswordHint">Vendor Password Hint</label>
+                <input id="VendorPasswordHint" name="VendorPasswordHint" />
+              </div>
 
-                    <label>
-                        Vendor Support Email
-                        <input type="email" name="VendorSupportEmail" placeholder="support@example.com" />
-                    </label>
+              <div class="form-group">
+                <label for="VendorSupportEmail">Vendor Support Email</label>
+                <input id="VendorSupportEmail" name="VendorSupportEmail" />
+              </div>
 
-                    <label>
-                        Vendor Support Phone
-                        <input type="text" name="VendorSupportPhone" placeholder="+1-800-123-4567" />
-                    </label>
+              <div class="form-group">
+                <label for="VendorSupportPhone">Vendor Support Phone</label>
+                <input id="VendorSupportPhone" name="VendorSupportPhone" />
+              </div>
 
-                    <label>
-                        Purchase Date
-                        <input type="date" name="PurchaseDate" />
-                    </label>
+              <div class="form-group">
+                <label for="PurchaseDate">Purchase Date</label>
+                <input id="PurchaseDate" name="PurchaseDate" type="date" />
+              </div>
 
-                    <label>
-                        Price Paid
-                        <input type="number" step="0.01" name="PricePaid" placeholder="2499.99" />
-                    </label>
+              <div class="form-group">
+                <label for="PricePaid">Price Paid</label>
+                <input id="PricePaid" name="PricePaid" type="number" step="0.01" />
+              </div>
 
-                    <label>
-                        Currency
-                        <input type="text" name="Currency" placeholder="USD" />
-                    </label>
+              <div class="form-group">
+                <label for="Currency">Currency</label>
+                <input id="Currency" name="Currency" placeholder="USD, EUR..." />
+              </div>
 
-                    <label>
-                        Order ID
-                        <input type="text" name="OrderID" placeholder="Store order number" />
-                    </label>
+              <div class="form-group">
+                <label for="OrderID">Order ID</label>
+                <input id="OrderID" name="OrderID" />
+              </div>
 
-                    <label>
-                        Serial Number
-                        <input type="text" name="SerialNumber" placeholder="From the box / product" />
-                    </label>
+              <div class="form-group">
+                <label for="SerialNumber">Serial Number</label>
+                <input id="SerialNumber" name="SerialNumber" />
+              </div>
 
-                    <label>
-                        Warranty Provider
-                        <input type="text" name="WarrantyProvider" placeholder="e.g. ASUS, Corsair" />
-                    </label>
+              <div class="form-group">
+                <label for="WarrantyProvider">Warranty Provider</label>
+                <input id="WarrantyProvider" name="WarrantyProvider" />
+              </div>
 
-                    <label>
-                        Warranty Type
-                        <input type="text" name="WarrantyType" placeholder="Manufacturer / Store / Third-Party" />
-                    </label>
+              <div class="form-group">
+                <label for="WarrantyType">Warranty Type</label>
+                <input id="WarrantyType" name="WarrantyType" />
+              </div>
 
-                    <label>
-                        Warranty Registration URL
-                        <input type="url" name="WarrantyRegistrationURL" placeholder="https://..." />
-                    </label>
+              <div class="form-group">
+                <label for="WarrantyRegistrationURL">Warranty Registration URL</label>
+                <input
+                  id="WarrantyRegistrationURL"
+                  name="WarrantyRegistrationURL"
+                  placeholder="https://..."
+                />
+              </div>
 
-                    <label>
-                        Warranty Length (months)
-                        <input type="number" name="WarrantyLengthMonths" placeholder="36" />
-                    </label>
+              <div class="form-group">
+                <label for="WarrantyLengthMonths">Warranty Length (months)</label>
+                <input
+                  id="WarrantyLengthMonths"
+                  name="WarrantyLengthMonths"
+                  type="number"
+                />
+              </div>
 
-                    <label>
-                        Warranty Start Date
-                        <input type="date" name="WarrantyStartDate" />
-                    </label>
+              <div class="form-group">
+                <label for="WarrantyStartDate">Warranty Start Date</label>
+                <input id="WarrantyStartDate" name="WarrantyStartDate" type="date" />
+              </div>
 
-                    <label>
-                        Warranty End Date
-                        <input type="date" name="WarrantyEndDate" />
-                    </label>
+              <div class="form-group">
+                <label for="WarrantyEndDate">Warranty End Date</label>
+                <input id="WarrantyEndDate" name="WarrantyEndDate" type="date" />
+              </div>
 
-                    <label>
-                        Warranty Support Email
-                        <input type="email" name="WarrantySupportEmail" placeholder="warranty@example.com" />
-                    </label>
+              <div class="form-group">
+                <label for="WarrantySupportEmail">Warranty Support Email</label>
+                <input id="WarrantySupportEmail" name="WarrantySupportEmail" />
+              </div>
 
-                    <label>
-                        Warranty Support Phone
-                        <input type="text" name="WarrantySupportPhone" placeholder="+1-800-..." />
-                    </label>
+              <div class="form-group">
+                <label for="WarrantySupportPhone">Warranty Support Phone</label>
+                <input id="WarrantySupportPhone" name="WarrantySupportPhone" />
+              </div>
 
-                    <label>
-                        Extended Warranty Provider
-                        <input type="text" name="ExtendedWarrantyProvider"
-                            placeholder="SquareTrade, Store plan, etc." />
-                    </label>
+              <div class="form-group">
+                <label for="ExtendedWarrantyProvider">Ext. Warranty Provider</label>
+                <input
+                  id="ExtendedWarrantyProvider"
+                  name="ExtendedWarrantyProvider"
+                />
+              </div>
 
-                    <label>
-                        Extended Warranty Length (months)
-                        <input type="number" name="ExtendedWarrantyLengthMonths" placeholder="24" />
-                    </label>
-
-                    <label>
-                        Extended Warranty Details
-                        <input type="text" name="ExtendedWarrantyDetails" placeholder="2-year GPU accidental damage" />
-                    </label>
-
-                    <label>
-                        Extended Warranty Support Email
-                        <input type="email" name="ExtendedWarrantySupportEmail" placeholder="support@extended.com" />
-                    </label>
-
-                    <label>
-                        Extended Warranty Support Phone
-                        <input type="text" name="ExtendedWarrantySupportPhone" placeholder="+1-800-..." />
-                    </label>
-                </div>
-
-                <label class="notes-label">
-                    Notes
-                    <textarea name="Notes" rows="3"
-                        placeholder="Anything important about this part or warranty..."></textarea>
+              <div class="form-group">
+                <label for="ExtendedWarrantyLengthMonths">
+                  Ext. Warranty Length (months)
                 </label>
+                <input
+                  id="ExtendedWarrantyLengthMonths"
+                  name="ExtendedWarrantyLengthMonths"
+                  type="number"
+                />
+              </div>
 
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary">Save (Add / Update)</button>
-                    <button type="button" id="reset-form" class="btn-secondary">New / Clear</button>
-                    <button type="button" id="delete-part" class="btn-secondary btn-danger">Delete Selected</button>
-                    <button type="button" id="download-csv" class="btn-ghost">
-                        Download CSV Snapshot
-                    </button>
-                </div>
-                <p class="hint">
-                    Changes made here update the in-page data. To make them permanent, replace
-                    <code>data/pc_parts.csv</code>
-                    in your repo with a new CSV (or edit it directly) and push to GitHub.
-                </p>
-            </form>
-        </section>
+              <div class="form-group">
+                <label for="ExtendedWarrantyDetails">Ext. Warranty Details</label>
+                <textarea
+                  id="ExtendedWarrantyDetails"
+                  name="ExtendedWarrantyDetails"
+                  rows="2"
+                ></textarea>
+              </div>
 
-        <section class="panel panel-table">
-            <div class="table-header">
-                <h2>Parts & Warranties</h2>
-                <div class="filters">
-                    <input type="text" id="search-input" placeholder="Search (part, vendor, warranty provider)..." />
-                    <select id="category-filter">
-                        <option value="">All Categories</option>
-                        <option>CPU</option>
-                        <option>GPU</option>
-                        <option>Motherboard</option>
-                        <option>Memory</option>
-                        <option>Storage</option>
-                        <option>Power Supply</option>
-                        <option>Case</option>
-                        <option>Cooler</option>
-                        <option>Fans</option>
-                        <option>Monitor</option>
-                        <option>OS / License</option>
-                        <option>Peripheral</option>
-                        <option>Other</option>
-                    </select>
-                </div>
+              <div class="form-group">
+                <label for="ExtendedWarrantySupportEmail">
+                  Ext. Warranty Support Email
+                </label>
+                <input
+                  id="ExtendedWarrantySupportEmail"
+                  name="ExtendedWarrantySupportEmail"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="ExtendedWarrantySupportPhone">
+                  Ext. Warranty Support Phone
+                </label>
+                <input
+                  id="ExtendedWarrantySupportPhone"
+                  name="ExtendedWarrantySupportPhone"
+                />
+              </div>
+
+              <div class="form-group form-group-full">
+                <label for="Notes">Notes</label>
+                <textarea id="Notes" name="Notes" rows="2"></textarea>
+              </div>
             </div>
 
-            <div class="table-wrapper">
-                <table id="parts-table">
-                    <thead>
-                        <tr>
-                            <th>Category</th>
-                            <th>Part</th>
-                            <th>Vendor</th>
-                            <th>Price</th>
-                            <th>Warranty</th>
-                            <th>Extended Warranty</th>
-                            <th>Vendor Contact</th>
-                            <th>Warranty Contact</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Populated by app.js -->
-                    </tbody>
-                </table>
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Save (Add / Update)</button>
+              <button type="button" id="reset-form" class="btn-secondary">
+                New / Clear
+              </button>
+              <button type="button" id="delete-part" class="btn-secondary btn-danger">
+                Delete Selected
+              </button>
             </div>
+          </form>
         </section>
-    </main>
 
-    <footer class="footer">
-        <span>Matrix Tracker • Data from <code>data/pc_parts.csv</code></span>
-    </footer>
+        <!-- RIGHT: TABLE -->
+        <section class="panel panel-right">
+          <div class="panel-header">
+            <h2 class="panel-title">Parts Matrix</h2>
+            <div class="panel-controls">
+              <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="Search parts, vendors, notes..."
+              />
+              <select id="category-filter" class="filter-select">
+                <option value="">All Categories</option>
+                <option value="CPU">CPU</option>
+                <option value="GPU">GPU</option>
+                <option value="Motherboard">Motherboard</option>
+                <option value="Memory">Memory</option>
+                <option value="Storage">Storage</option>
+                <option value="Case">Case</option>
+                <option value="Power Supply">Power Supply</option>
+                <option value="Case Fan">Case Fan</option>
+                <option value="Monitor">Monitor</option>
+              </select>
+              <div class="table-actions">
+                <button type="button" id="download-csv" class="btn-ghost">
+                  Download CSV (Table)
+                </button>
+                <button type="button" id="download-pdf" class="btn-ghost">
+                  Download PDF (Table)
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-wrapper">
+            <table id="parts-table" class="matrix-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Part</th>
+                  <th>Vendor</th>
+                  <th>Price</th>
+                  <th>Warranty</th>
+                  <th>Ext. Warranty</th>
+                  <th>Vendor Contact</th>
+                  <th>Warranty Contact</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Filled by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="totals-bar" class="totals-bar"></div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Details / Notes Modal -->
+    <div id="modal-backdrop" class="modal-backdrop hidden"></div>
+
+    <div id="details-modal" class="modal hidden">
+      <div class="modal-content">
+        <button class="modal-close" id="details-close">×</button>
+        <h3>Part Details</h3>
+        <div id="details-title" class="modal-title"></div>
+
+        <label for="details-notes">Details / Notes</label>
+        <textarea id="details-notes" rows="6"></textarea>
+
+        <div class="modal-actions">
+          <button type="button" id="details-save" class="btn-primary">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PDF libraries for exporting table as PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
 
     <script src="app.js"></script>
-</body>
-
+  </body>
 </html>

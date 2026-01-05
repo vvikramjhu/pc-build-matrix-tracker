@@ -23,6 +23,18 @@ const form = document.querySelector("#part-form");
 const resetFormBtn = document.querySelector("#reset-form");
 const deleteBtn = document.querySelector("#delete-part");
 const downloadCsvBtn = document.querySelector("#download-csv");
+const downloadPdfBtn = document.querySelector("#download-pdf");
+const totalsBar = document.querySelector("#totals-bar");
+
+// Modal elements
+const detailsModal = document.querySelector("#details-modal");
+const modalBackdrop = document.querySelector("#modal-backdrop");
+const detailsCloseBtn = document.querySelector("#details-close");
+const detailsSaveBtn = document.querySelector("#details-save");
+const detailsNotesInput = document.querySelector("#details-notes");
+const detailsTitle = document.querySelector("#details-title");
+
+let detailsIndex = null; // which part the modal is editing
 
 async function loadData() {
   try {
@@ -35,7 +47,8 @@ async function loadData() {
   } catch (err) {
     console.error(err);
     tableBody.innerHTML =
-      '<tr><td colspan="8">Unable to load CSV. Ensure <code>data/pc_parts.csv</code> exists.</td></tr>';
+      '<tr><td colspan="9">Unable to load CSV. Ensure <code>data/pc_parts.csv</code> exists.</td></tr>';
+    updateTotals();
   }
 }
 
@@ -85,7 +98,8 @@ function contactBlock(email, phone) {
 function renderTable() {
   if (!filteredParts.length) {
     tableBody.innerHTML =
-      '<tr><td colspan="8">No parts found. Add entries via the form or in the CSV.</td></tr>';
+      '<tr><td colspan="9">No parts found. Add entries via the form or in the CSV.</td></tr>';
+    updateTotals();
     return;
   }
 
@@ -122,10 +136,34 @@ function renderTable() {
           <td>${summarizeExtendedWarranty(p)}</td>
           <td>${vendorContact}</td>
           <td>${warrantyContact}</td>
+          <td>
+            <button type="button" class="details-btn" data-details-index="${masterIndex}">
+              Details
+            </button>
+          </td>
         </tr>
       `;
     })
     .join("");
+
+  updateTotals();
+}
+
+// Totals bar
+function updateTotals() {
+  if (!totalsBar) return;
+  const source = filteredParts.length ? filteredParts : parts;
+  const total = source.reduce((sum, p) => {
+    const v = parseFloat(p.PricePaid);
+    return sum + (isNaN(v) ? 0 : v);
+  }, 0);
+
+  if (!source.length) {
+    totalsBar.textContent = "No parts to total.";
+    return;
+  }
+
+  totalsBar.textContent = `Total price of listed parts: USD ${total.toFixed(2)}`;
 }
 
 // Filter logic
@@ -154,7 +192,7 @@ function applyFilters() {
   renderTable();
 }
 
-// Map form values to object
+// Map form values to object (fill empties with dummy_<field>)
 function formToObject(formEl) {
   const data = new FormData(formEl);
   const obj = {};
@@ -211,13 +249,38 @@ function clearSelectionHighlight() {
   });
 }
 
-// Download current in-memory data as CSV
+// Modal helpers
+function openDetailsModal(index) {
+  detailsIndex = index;
+  const part = parts[index];
+  if (!part) return;
+
+  const title = [part.PartName || "", part.Model || ""]
+    .filter(Boolean)
+    .join(" — ");
+  detailsTitle.textContent = title || "Part Details";
+
+  detailsNotesInput.value = part.Notes || "";
+
+  modalBackdrop.classList.remove("hidden");
+  detailsModal.classList.remove("hidden");
+}
+
+function closeDetailsModal() {
+  detailsIndex = null;
+  modalBackdrop.classList.add("hidden");
+  detailsModal.classList.add("hidden");
+}
+
+// Download current right-hand table as CSV (filtered if any filter is applied)
 function downloadCsvSnapshot() {
-  if (!parts.length) return;
-  const headers = Object.keys(parts[0]);
+  const source = filteredParts.length ? filteredParts : parts;
+  if (!source.length) return;
+
+  const headers = Object.keys(source[0]);
   const rows = [
     headers.join(","),
-    ...parts.map((p) =>
+    ...source.map((p) =>
       headers.map((h) => (p[h] || "").replace(/,/g, " ")).join(",")
     ),
   ];
@@ -227,17 +290,73 @@ function downloadCsvSnapshot() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "pc_parts_snapshot.csv";
+  a.download = "pc_parts_table.csv";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
-// Event listeners
+// Download right-hand table as PDF
+function downloadPdfTable() {
+  const source = filteredParts.length ? filteredParts : parts;
+  if (!source.length || !window.jspdf || !window.jspdf.jsPDF) return;
 
-// Click on table row -> select + populate form
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF("l", "pt", "a4");
+
+  const columns = [
+    { header: "Category", key: "Category" },
+    { header: "Part", key: "PartName" },
+    { header: "Model", key: "Model" },
+    { header: "Vendor", key: "VendorName" },
+    { header: "Price", key: "PricePaid" },
+    { header: "Warranty", key: "WarrantyProvider" },
+    { header: "Ext. Warranty", key: "ExtendedWarrantyProvider" },
+    { header: "Notes", key: "Notes" },
+  ];
+
+  const rows = source.map((p) => ({
+    Category: p.Category || "",
+    PartName: p.PartName || "",
+    Model: p.Model || "",
+    VendorName: p.VendorName || "",
+    PricePaid: formatPrice(p),
+    WarrantyProvider: p.WarrantyProvider || "",
+    ExtendedWarrantyProvider: p.ExtendedWarrantyProvider || "",
+    Notes: p.Notes || "",
+  }));
+
+  doc.text("PC Build Matrix – Parts Summary", 40, 40);
+
+  const head = [columns.map((c) => c.header)];
+  const body = rows.map((r) => columns.map((c) => r[c.key]));
+
+  doc.autoTable({
+    startY: 60,
+    head,
+    body,
+    styles: { fontSize: 8, cellPadding: 3 },
+    headStyles: { fillColor: [0, 200, 150] },
+  });
+
+  doc.save("pc_parts_table.pdf");
+}
+
+// EVENT LISTENERS
+
+// Click on table row or Details button
 tableBody.addEventListener("click", (e) => {
+  const detailsBtn = e.target.closest(".details-btn");
+  if (detailsBtn && detailsBtn.dataset.detailsIndex !== undefined) {
+    const idx = Number.parseInt(detailsBtn.dataset.detailsIndex, 10);
+    if (!Number.isNaN(idx) && parts[idx]) {
+      openDetailsModal(idx);
+    }
+    e.stopPropagation();
+    return;
+  }
+
   const tr = e.target.closest("tr");
   if (!tr || !tr.dataset.index) return;
 
@@ -306,8 +425,21 @@ deleteBtn.addEventListener("click", () => {
   applyFilters();
 });
 
-// Download CSV snapshot
+// Modal
+detailsCloseBtn.addEventListener("click", closeDetailsModal);
+modalBackdrop.addEventListener("click", closeDetailsModal);
+
+detailsSaveBtn.addEventListener("click", () => {
+  if (detailsIndex === null || !parts[detailsIndex]) return;
+  const notes = detailsNotesInput.value.trim() || "dummy_Notes";
+  parts[detailsIndex].Notes = notes;
+  applyFilters(); // re-render table with updated Notes
+  closeDetailsModal();
+});
+
+// Downloads
 downloadCsvBtn.addEventListener("click", downloadCsvSnapshot);
+downloadPdfBtn.addEventListener("click", downloadPdfTable);
 
 // Load CSV on startup
 loadData();
