@@ -27,16 +27,15 @@ html,
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
   background: radial-gradient(circle at top, #04151c 0, #010307 55%, #000000 100%);
   color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
 }
 
+/* IMPORTANT: allow full-page scroll */
 body {
   position: relative;
-  overflow: hidden;
 }
 
 /* MATRIX BACKGROUND */
@@ -64,15 +63,15 @@ body {
 .app-shell {
   position: relative;
   margin: 1.5rem auto;
-  max-width: 1320px;
-  height: calc(100vh - 3rem);
+  max-width: 1600px; /* full-ish width; change to 100% if you want absolute full */
+  width: 100%;
   border-radius: 18px;
   border: 1px solid rgba(0, 255, 154, 0.12);
   background: radial-gradient(circle at top left, #071b21 0, #020609 60%);
   box-shadow: var(--shadow-soft);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /* no fixed height, no hidden overflow */
 }
 
 /* HEADER */
@@ -128,7 +127,6 @@ body {
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.4fr);
   gap: var(--grid-gap);
   padding: 1.2rem 1.4rem 1.4rem;
-  height: 100%;
 }
 
 /* PANELS */
@@ -140,7 +138,6 @@ body {
   padding: 1.1rem 1.1rem 1.2rem;
   display: flex;
   flex-direction: column;
-  min-height: 0;
 }
 
 .panel-title {
@@ -153,9 +150,7 @@ body {
 
 /* LEFT PANEL: FORM */
 .matrix-form {
-  flex: 1;
-  overflow: auto;
-  padding-right: 0.2rem;
+  /* let content grow; no inner scrolling */
 }
 
 .form-grid {
@@ -300,9 +295,8 @@ textarea {
   gap: 0.4rem;
 }
 
+/* Remove internal scroll; let page scroll */
 .table-wrapper {
-  flex: 1;
-  overflow: auto;
   border-radius: var(--radius-md);
   border: 1px solid rgba(0, 255, 154, 0.18);
   background: radial-gradient(circle at top left, #07141a 0, #020609 60%);
@@ -316,14 +310,11 @@ textarea {
 }
 
 .matrix-table thead {
-  position: sticky;
-  top: 0;
   background: linear-gradient(
     to right,
     rgba(0, 12, 10, 0.98),
     rgba(0, 20, 18, 0.98)
   );
-  z-index: 2;
 }
 
 .matrix-table th,
@@ -479,11 +470,6 @@ tbody tr.selected-row {
 @media (max-width: 980px) {
   .app-main {
     grid-template-columns: minmax(0, 1fr);
-    height: auto;
-  }
-
-  .panel {
-    min-height: 340px;
   }
 
   .panel-right {
