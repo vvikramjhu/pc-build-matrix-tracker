@@ -159,7 +159,7 @@ function formToObject(formEl) {
   const data = new FormData(formEl);
   const obj = {};
   for (const [key, val] of data.entries()) {
-    obj[key] = val.trim();
+    obj[key] = val.trim() || `dummy_${key}`;
   }
   return obj;
 }
