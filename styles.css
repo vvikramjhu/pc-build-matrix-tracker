@@ -1,3 +1,6 @@
+/* ========================================
+   CSS CUSTOM PROPERTIES (DESIGN TOKENS)
+   ======================================== */
 :root {
   --bg: #020609;
   --bg-alt: #050b10;
@@ -17,13 +20,16 @@
     "Segoe UI", sans-serif;
 }
 
+/* ========================================
+   GLOBAL RESET & BASE STYLES
+   ======================================== */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-/* Make app fill the viewport and disable scrollbars */
+/* Full viewport, no scrollbars */
 html,
 body {
   margin: 0;
@@ -37,14 +43,16 @@ body {
   overflow: hidden; /* no page scrollbar */
 }
 
-/* Hide scrollbars in WebKit */
+/* Hide all scrollbars in WebKit browsers */
 body::-webkit-scrollbar,
 *::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
 
-/* MATRIX BACKGROUND */
+/* ========================================
+   MATRIX BACKGROUND OVERLAY
+   ======================================== */
 .matrix-bg {
   position: fixed;
   inset: 0;
@@ -65,11 +73,13 @@ body::-webkit-scrollbar,
   z-index: -1;
 }
 
-/* APP SHELL: now spans full width & height with small padding */
+/* ========================================
+   APP SHELL: main container
+   ======================================== */
 .app-shell {
   position: relative;
   margin: 0;
-  padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+  padding: 0.75rem;
   width: 100vw;
   height: 100vh;
   border-radius: 0;
@@ -81,7 +91,9 @@ body::-webkit-scrollbar,
   overflow: hidden; /* no scrollbars inside */
 }
 
-/* HEADER */
+/* ========================================
+   HEADER: logo and title bar
+   ======================================== */
 .app-header {
   flex: 0 0 auto;
   padding: 0.6rem 0.9rem;
@@ -130,7 +142,9 @@ body::-webkit-scrollbar,
   color: var(--muted);
 }
 
-/* MAIN LAYOUT: fill remaining height, two panels side by side */
+/* ========================================
+   MAIN LAYOUT: two-column grid
+   ======================================== */
 .app-main {
   flex: 1 1 auto;
   margin-top: 0.6rem;
@@ -139,10 +153,12 @@ body::-webkit-scrollbar,
   gap: var(--grid-gap);
   padding: 0;
   height: calc(100% - 0.6rem);
-  min-height: 0; /* important to avoid overflow */
+  min-height: 0; /* allow flexbox to shrink */
 }
 
-/* PANELS */
+/* ========================================
+   PANELS: left (form) and right (table)
+   ======================================== */
 .panel {
   background: radial-gradient(circle at top left, #07141a 0, #020609 60%);
   border-radius: var(--radius-lg);
@@ -162,14 +178,17 @@ body::-webkit-scrollbar,
   color: var(--accent);
 }
 
-/* LEFT PANEL: FORM */
+/* ========================================
+   LEFT PANEL: FORM
+   ======================================== */
 .matrix-form {
   flex: 1 1 auto;
   min-height: 0;
   padding-right: 0.2rem;
-  overflow: hidden; /* no scroll; we'll size form contents to fit */
+  overflow: hidden; /* no scroll; form sized to fit */
 }
 
+/* Form grid: 2 columns */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -182,6 +201,7 @@ body::-webkit-scrollbar,
   flex-direction: column;
 }
 
+/* Full-width form group (e.g. Notes) */
 .form-group-full {
   grid-column: 1 / -1;
 }
@@ -192,6 +212,7 @@ label {
   margin-bottom: 0.1rem;
 }
 
+/* Input, select, textarea styling */
 input,
 select,
 textarea {
@@ -217,6 +238,7 @@ textarea {
   max-height: 3rem;
 }
 
+/* Form action buttons container */
 .form-actions {
   display: flex;
   flex-wrap: wrap;
@@ -224,7 +246,9 @@ textarea {
   margin-top: 0.45rem;
 }
 
-/* BUTTONS */
+/* ========================================
+   BUTTONS: primary, secondary, ghost, danger
+   ======================================== */
 .btn-primary,
 .btn-secondary,
 .btn-ghost {
@@ -284,7 +308,9 @@ textarea {
   box-shadow: 0 0 10px rgba(255, 77, 79, 0.7);
 }
 
-/* RIGHT PANEL: TABLE */
+/* ========================================
+   RIGHT PANEL: TABLE
+   ======================================== */
 .panel-header {
   flex: 0 0 auto;
   display: flex;
@@ -315,20 +341,23 @@ textarea {
   gap: 0.3rem;
 }
 
+/* Table wrapper: limited height to ~9 rows (Monitor + 3 empty) */
 .table-wrapper {
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 0 0 auto;
+  height: 320px; /* adjust this to fit ~9 rows; tweak as needed */
   border-radius: var(--radius-md);
   border: 1px solid rgba(0, 255, 154, 0.18);
   background: radial-gradient(circle at top left, #07141a 0, #020609 60%);
   overflow: hidden; /* no inner scrollbar */
 }
 
-/* TABLE */
+/* ========================================
+   TABLE: resizable columns
+   ======================================== */
 .matrix-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
+  table-layout: fixed; /* required for resizable columns */
   font-size: 0.72rem;
 }
 
@@ -340,6 +369,22 @@ textarea {
   );
 }
 
+/* Resizable table header */
+.resizable-th {
+  position: relative;
+  padding: 0.3rem 0.4rem;
+  border-bottom: 1px solid rgba(0, 255, 154, 0.12);
+  text-align: left;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  resize: horizontal; /* enables column resizing in some browsers */
+}
+
 .matrix-table th,
 .matrix-table td {
   padding: 0.3rem 0.4rem;
@@ -348,14 +393,6 @@ textarea {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.matrix-table th {
-  text-align: left;
-  font-size: 0.68rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--muted);
 }
 
 .matrix-table tbody tr {
@@ -371,14 +408,28 @@ textarea {
   background: rgba(0, 80, 40, 0.85);
 }
 
+/* Selected row highlight */
 tbody tr.selected-row {
   background: rgba(0, 100, 60, 0.9) !important;
 }
 
-/* Totals bar under the table, fixed height */
+/* Category cell: clickable to open notes popup */
+.category-cell {
+  cursor: pointer;
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.category-cell:hover {
+  color: #00ffcc;
+}
+
+/* ========================================
+   TOTALS BAR: sum of visible part prices
+   ======================================== */
 .totals-bar {
   flex: 0 0 auto;
-  margin-top: 0.35rem;
+  margin-top: 0.5rem;
   padding: 0.5rem 0.7rem;
   border-radius: 6px;
   background: rgba(0, 255, 153, 0.06);
@@ -391,7 +442,9 @@ tbody tr.selected-row {
   font-size: 0.85rem;
 }
 
-/* Badge styles */
+/* ========================================
+   BADGE STYLES: warranty indicators
+   ======================================== */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -411,23 +464,9 @@ tbody tr.selected-row {
   color: var(--accent);
 }
 
-/* Details button in the table */
-.details-btn {
-  border: 1px solid var(--accent-muted);
-  background: transparent;
-  color: var(--accent);
-  padding: 0.15rem 0.4rem;
-  border-radius: 4px;
-  font-size: 0.7rem;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.details-btn:hover {
-  background: rgba(0, 255, 153, 0.08);
-}
-
-/* Modal + backdrop */
+/* ========================================
+   MODAL: notes popup (triggered by Category click)
+   ======================================== */
 .modal-backdrop {
   position: fixed;
   inset: 0;
@@ -466,7 +505,7 @@ tbody tr.selected-row {
   color: var(--accent);
 }
 
-#details-notes {
+#notes-textarea {
   width: 100%;
   margin-top: 0.2rem;
   margin-bottom: 0.6rem;
@@ -498,7 +537,9 @@ tbody tr.selected-row {
   gap: 0.4rem;
 }
 
-/* RESPONSIVE (still no global scrollbars – panels just get smaller) */
+/* ========================================
+   RESPONSIVE: single column on small screens
+   ======================================== */
 @media (max-width: 980px) {
   .app-main {
     grid-template-columns: minmax(0, 1fr);

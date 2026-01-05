@@ -1,4 +1,6 @@
-// Simple CSV parser for this specific structure
+/* ========================================
+   CSV PARSER: converts CSV text to array of objects
+   ======================================== */
 function parseCSV(text) {
   const lines = text.trim().split(/\r?\n/);
   const headers = lines[0].split(",");
@@ -12,10 +14,17 @@ function parseCSV(text) {
   });
 }
 
-let parts = [];
-let filteredParts = [];
-let selectedIndex = null; // index into `parts` of the currently selected item
+/* ========================================
+   GLOBAL STATE
+   ======================================== */
+let parts = []; // master array of all parts
+let filteredParts = []; // filtered/searched subset
+let selectedIndex = null; // index into `parts` of currently selected row
+let notesIndex = null; // index into `parts` for notes modal
 
+/* ========================================
+   DOM REFERENCES
+   ======================================== */
 const tableBody = document.querySelector("#parts-table tbody");
 const searchInput = document.querySelector("#search-input");
 const categoryFilter = document.querySelector("#category-filter");
@@ -26,16 +35,17 @@ const downloadCsvBtn = document.querySelector("#download-csv");
 const downloadPdfBtn = document.querySelector("#download-pdf");
 const totalsBar = document.querySelector("#totals-bar");
 
-// Modal elements
-const detailsModal = document.querySelector("#details-modal");
+// Notes modal elements
+const notesModal = document.querySelector("#notes-modal");
 const modalBackdrop = document.querySelector("#modal-backdrop");
-const detailsCloseBtn = document.querySelector("#details-close");
-const detailsSaveBtn = document.querySelector("#details-save");
-const detailsNotesInput = document.querySelector("#details-notes");
-const detailsTitle = document.querySelector("#details-title");
+const notesCloseBtn = document.querySelector("#notes-close");
+const notesSaveBtn = document.querySelector("#notes-save");
+const notesTextarea = document.querySelector("#notes-textarea");
+const notesTitle = document.querySelector("#notes-title");
 
-let detailsIndex = null; // which part the modal is editing
-
+/* ========================================
+   LOAD DATA: fetch and parse CSV on startup
+   ======================================== */
 async function loadData() {
   try {
     const res = await fetch("data/pc_parts.csv");
@@ -47,11 +57,16 @@ async function loadData() {
   } catch (err) {
     console.error(err);
     tableBody.innerHTML =
-      '<tr><td colspan="9">Unable to load CSV. Ensure <code>data/pc_parts.csv</code> exists.</td></tr>';
+      '<tr><td colspan="8">Unable to load CSV. Ensure <code>data/pc_parts.csv</code> exists.</td></tr>';
     updateTotals();
   }
 }
 
+/* ========================================
+   FORMATTING HELPERS
+   ======================================== */
+
+// Format price with currency
 function formatPrice(p) {
   if (!p.PricePaid) return "";
   const cur = p.Currency || "USD";
@@ -60,6 +75,7 @@ function formatPrice(p) {
   return `${cur} ${num.toFixed(2)}`;
 }
 
+// Summarize warranty info
 function summarizeWarranty(p) {
   if (!p.WarrantyProvider && !p.WarrantyLengthMonths) {
     return '<span class="badge badge-none">None recorded</span>';
@@ -72,6 +88,7 @@ function summarizeWarranty(p) {
   return [label, extra].filter(Boolean).join("<br/>");
 }
 
+// Summarize extended warranty info
 function summarizeExtendedWarranty(p) {
   if (!p.ExtendedWarrantyProvider && !p.ExtendedWarrantyLengthMonths) {
     return '<span class="badge badge-none">None</span>';
@@ -88,6 +105,7 @@ function summarizeExtendedWarranty(p) {
   }`;
 }
 
+// Build contact info block (email + phone)
 function contactBlock(email, phone) {
   const bits = [];
   if (email) bits.push(`<div>Email: <a href="mailto:${email}">${email}</a></div>`);
@@ -95,10 +113,13 @@ function contactBlock(email, phone) {
   return bits.join("") || "";
 }
 
+/* ========================================
+   RENDER TABLE: build HTML rows from filteredParts
+   ======================================== */
 function renderTable() {
   if (!filteredParts.length) {
     tableBody.innerHTML =
-      '<tr><td colspan="9">No parts found. Add entries via the form or in the CSV.</td></tr>';
+      '<tr><td colspan="8">No parts found. Add entries via the form or in the CSV.</td></tr>';
     updateTotals();
     return;
   }
@@ -128,7 +149,7 @@ function renderTable() {
 
       return `
         <tr data-index="${masterIndex}" class="${isSelected ? "selected-row" : ""}">
-          <td>${cat}</td>
+          <td class="category-cell" data-notes-index="${masterIndex}">${cat}</td>
           <td>${partDisplay}</td>
           <td>${vendorLink || ""}</td>
           <td>${formatPrice(p)}</td>
@@ -136,11 +157,6 @@ function renderTable() {
           <td>${summarizeExtendedWarranty(p)}</td>
           <td>${vendorContact}</td>
           <td>${warrantyContact}</td>
-          <td>
-            <button type="button" class="details-btn" data-details-index="${masterIndex}">
-              Details
-            </button>
-          </td>
         </tr>
       `;
     })
@@ -149,7 +165,9 @@ function renderTable() {
   updateTotals();
 }
 
-// Totals bar
+/* ========================================
+   UPDATE TOTALS BAR: sum of all visible prices
+   ======================================== */
 function updateTotals() {
   if (!totalsBar) return;
   const source = filteredParts.length ? filteredParts : parts;
@@ -166,7 +184,9 @@ function updateTotals() {
   totalsBar.textContent = `Total price of listed parts: USD ${total.toFixed(2)}`;
 }
 
-// Filter logic
+/* ========================================
+   FILTER LOGIC: search + category filter
+   ======================================== */
 function applyFilters() {
   const q = (searchInput.value || "").toLowerCase();
   const cat = categoryFilter.value;
@@ -192,7 +212,11 @@ function applyFilters() {
   renderTable();
 }
 
-// Map form values to object (fill empties with dummy_<field>)
+/* ========================================
+   FORM HELPERS
+   ======================================== */
+
+// Convert form data to object; fill empty fields with dummy_ values
 function formToObject(formEl) {
   const data = new FormData(formEl);
   const obj = {};
@@ -243,36 +267,46 @@ function populateFormFromPart(part) {
   });
 }
 
+// Clear row selection highlight
 function clearSelectionHighlight() {
   tableBody.querySelectorAll("tr").forEach((row) => {
     row.classList.remove("selected-row");
   });
 }
 
-// Modal helpers
-function openDetailsModal(index) {
-  detailsIndex = index;
+/* ========================================
+   NOTES MODAL HELPERS
+   ======================================== */
+
+// Open notes modal for a specific part
+function openNotesModal(index) {
+  notesIndex = index;
   const part = parts[index];
   if (!part) return;
 
   const title = [part.PartName || "", part.Model || ""]
     .filter(Boolean)
     .join(" — ");
-  detailsTitle.textContent = title || "Part Details";
+  notesTitle.textContent = title || "Part Notes";
 
-  detailsNotesInput.value = part.Notes || "";
+  notesTextarea.value = part.Notes || "";
 
   modalBackdrop.classList.remove("hidden");
-  detailsModal.classList.remove("hidden");
+  notesModal.classList.remove("hidden");
 }
 
-function closeDetailsModal() {
-  detailsIndex = null;
+// Close notes modal
+function closeNotesModal() {
+  notesIndex = null;
   modalBackdrop.classList.add("hidden");
-  detailsModal.classList.add("hidden");
+  notesModal.classList.add("hidden");
 }
 
-// Download current right-hand table as CSV (filtered if any filter is applied)
+/* ========================================
+   DOWNLOAD HELPERS
+   ======================================== */
+
+// Download current table as CSV
 function downloadCsvSnapshot() {
   const source = filteredParts.length ? filteredParts : parts;
   if (!source.length) return;
@@ -297,7 +331,7 @@ function downloadCsvSnapshot() {
   URL.revokeObjectURL(url);
 }
 
-// Download right-hand table as PDF
+// Download current table as PDF
 function downloadPdfTable() {
   const source = filteredParts.length ? filteredParts : parts;
   if (!source.length || !window.jspdf || !window.jspdf.jsPDF) return;
@@ -343,20 +377,25 @@ function downloadPdfTable() {
   doc.save("pc_parts_table.pdf");
 }
 
-// EVENT LISTENERS
+/* ========================================
+   EVENT LISTENERS
+   ======================================== */
 
-// Click on table row or Details button
+// Click on table row: select row and populate form
+// Click on Category cell: open notes modal
 tableBody.addEventListener("click", (e) => {
-  const detailsBtn = e.target.closest(".details-btn");
-  if (detailsBtn && detailsBtn.dataset.detailsIndex !== undefined) {
-    const idx = Number.parseInt(detailsBtn.dataset.detailsIndex, 10);
+  // Check if Category cell was clicked
+  const categoryCell = e.target.closest(".category-cell");
+  if (categoryCell && categoryCell.dataset.notesIndex !== undefined) {
+    const idx = Number.parseInt(categoryCell.dataset.notesIndex, 10);
     if (!Number.isNaN(idx) && parts[idx]) {
-      openDetailsModal(idx);
+      openNotesModal(idx);
     }
     e.stopPropagation();
     return;
   }
 
+  // Otherwise, select the row
   const tr = e.target.closest("tr");
   if (!tr || !tr.dataset.index) return;
 
@@ -369,10 +408,13 @@ tableBody.addEventListener("click", (e) => {
   populateFormFromPart(parts[idx]);
 });
 
+// Search input: filter table
 searchInput.addEventListener("input", applyFilters);
+
+// Category filter: filter table
 categoryFilter.addEventListener("change", applyFilters);
 
-// Save (Add / Update)
+// Form submit: save (add or update) part
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const obj = formToObject(form);
@@ -392,6 +434,7 @@ form.addEventListener("submit", (e) => {
       parts[idx] = { ...parts[idx], ...obj };
       selectedIndex = idx;
     } else {
+      // Ensure new part has all fields from existing parts
       if (parts.length) {
         const headers = Object.keys(parts[0]);
         headers.forEach((h) => {
@@ -406,14 +449,14 @@ form.addEventListener("submit", (e) => {
   applyFilters();
 });
 
-// New / Clear
+// Reset form button: clear form and selection
 resetFormBtn.addEventListener("click", () => {
   form.reset();
   selectedIndex = null;
   clearSelectionHighlight();
 });
 
-// Delete Selected
+// Delete button: remove selected part
 deleteBtn.addEventListener("click", () => {
   if (selectedIndex === null || !parts[selectedIndex]) return;
   const ok = window.confirm("Delete the selected part from the list?");
@@ -425,21 +468,28 @@ deleteBtn.addEventListener("click", () => {
   applyFilters();
 });
 
-// Modal
-detailsCloseBtn.addEventListener("click", closeDetailsModal);
-modalBackdrop.addEventListener("click", closeDetailsModal);
+// Notes modal close button
+notesCloseBtn.addEventListener("click", closeNotesModal);
 
-detailsSaveBtn.addEventListener("click", () => {
-  if (detailsIndex === null || !parts[detailsIndex]) return;
-  const notes = detailsNotesInput.value.trim() || "dummy_Notes";
-  parts[detailsIndex].Notes = notes;
+// Notes modal backdrop click: close modal
+modalBackdrop.addEventListener("click", closeNotesModal);
+
+// Notes modal save button: save notes back to part
+notesSaveBtn.addEventListener("click", () => {
+  if (notesIndex === null || !parts[notesIndex]) return;
+  const notes = notesTextarea.value.trim() || "dummy_Notes";
+  parts[notesIndex].Notes = notes;
   applyFilters(); // re-render table with updated Notes
-  closeDetailsModal();
+  closeNotesModal();
 });
 
-// Downloads
+// Download CSV button
 downloadCsvBtn.addEventListener("click", downloadCsvSnapshot);
+
+// Download PDF button
 downloadPdfBtn.addEventListener("click", downloadPdfTable);
 
-// Load CSV on startup
+/* ========================================
+   INITIALIZATION: load CSV on page load
+   ======================================== */
 loadData();
