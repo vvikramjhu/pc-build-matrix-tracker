@@ -341,10 +341,10 @@ textarea {
   gap: 0.3rem;
 }
 
-/* Table wrapper: limited height to ~9 rows (Monitor + 3 empty) */
+/* Table wrapper: increased height to show Monitor + 4 empty rows (total ~13 rows visible) */
 .table-wrapper {
   flex: 0 0 auto;
-  height: 320px; /* adjust this to fit ~9 rows; tweak as needed */
+  height: 420px; /* increased from 320px to accommodate more rows */
   border-radius: var(--radius-md);
   border: 1px solid rgba(0, 255, 154, 0.18);
   background: radial-gradient(circle at top left, #07141a 0, #020609 60%);
