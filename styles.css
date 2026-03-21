@@ -18,7 +18,6 @@
   --grid-gap: 1.25rem;
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "Segoe UI", sans-serif;
-  /* Thin scrollbar colors */
   --scrollbar-track: rgba(0, 0, 0, 0.3);
   --scrollbar-thumb: rgba(0, 255, 154, 0.35);
   --scrollbar-thumb-hover: rgba(0, 255, 154, 0.65);
@@ -43,32 +42,45 @@ body {
   color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  overflow: hidden; /* no outer page scrollbar */
+  overflow: hidden;
 }
 
 /* ========================================
-   THIN SCROLLBAR — global utility
-   Applied only where overflow is set to auto/scroll
+   THIN SCROLLBAR — only on elements that scroll
    ======================================== */
-::-webkit-scrollbar {
+.matrix-form::-webkit-scrollbar,
+.table-wrapper::-webkit-scrollbar {
   width: 4px;
   height: 4px;
 }
-::-webkit-scrollbar-track {
+.matrix-form::-webkit-scrollbar-track,
+.table-wrapper::-webkit-scrollbar-track {
   background: var(--scrollbar-track);
   border-radius: 999px;
 }
-::-webkit-scrollbar-thumb {
+.matrix-form::-webkit-scrollbar-thumb,
+.table-wrapper::-webkit-scrollbar-thumb {
   background: var(--scrollbar-thumb);
   border-radius: 999px;
 }
-::-webkit-scrollbar-thumb:hover {
+.matrix-form::-webkit-scrollbar-thumb:hover,
+.table-wrapper::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover);
 }
-/* Firefox thin scrollbar */
-* {
+
+/* Firefox */
+.matrix-form,
+.table-wrapper {
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* Hide scrollbars everywhere else */
+body::-webkit-scrollbar,
+.app-shell::-webkit-scrollbar,
+.panel::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 /* ========================================
@@ -169,7 +181,10 @@ body {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.4fr);
   gap: var(--grid-gap);
+  /* KEY: give app-main a fixed height so children can scroll */
+  height: calc(100vh - 80px);
   min-height: 0;
+  overflow: hidden;
 }
 
 /* ========================================
@@ -183,28 +198,35 @@ body {
   padding: 0.8rem;
   display: flex;
   flex-direction: column;
-  min-height: 0;
+  /* KEY: panels must have a fixed height to allow inner scroll */
+  height: 100%;
   overflow: hidden;
 }
 
 .panel-title {
+  flex: 0 0 auto;
   margin: 0 0 0.4rem;
   font-size: 0.9rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--accent);
-  flex: 0 0 auto;
 }
 
 /* ========================================
-   LEFT PANEL: FORM — thin scrollbar, no outer scroll
+   LEFT PANEL: FORM
+   The form itself scrolls; panel-title and form-actions are fixed
    ======================================== */
+.panel-left {
+  /* panel already has height:100% and overflow:hidden */
+}
+
+/* Scrollable form area — takes remaining height after title & actions */
 .matrix-form {
   flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;   /* thin scrollbar on form */
+  min-height: 0;        /* KEY: allows flex child to shrink below content size */
+  overflow-y: auto;     /* scrollbar appears when content overflows */
   overflow-x: hidden;
-  padding-right: 0.3rem;
+  padding-right: 0.4rem;
 }
 
 .form-grid {
@@ -253,6 +275,7 @@ textarea {
   max-height: 3rem;
 }
 
+/* Form actions pinned at bottom of left panel */
 .form-actions {
   flex: 0 0 auto;
   display: flex;
@@ -260,6 +283,7 @@ textarea {
   gap: 0.35rem;
   margin-top: 0.45rem;
   padding-top: 0.3rem;
+  border-top: 1px solid rgba(0, 255, 154, 0.1);
 }
 
 /* ========================================
@@ -317,7 +341,7 @@ textarea {
 }
 
 /* ========================================
-   RIGHT PANEL: TABLE HEADER CONTROLS
+   RIGHT PANEL: HEADER CONTROLS
    ======================================== */
 .panel-header {
   flex: 0 0 auto;
@@ -350,15 +374,17 @@ textarea {
 }
 
 /* ========================================
-   TABLE WRAPPER: flex-grow, thin scrollbar
+   TABLE WRAPPER
+   KEY: flex:1 + min-height:0 forces it to fill remaining panel height
+   overflow:auto triggers the scrollbar when rows exceed the height
    ======================================== */
 .table-wrapper {
-  flex: 1 1 auto;       /* fills all remaining space in right panel */
-  min-height: 0;
+  flex: 1 1 auto;
+  min-height: 0;        /* KEY: must be set for flex child to scroll */
   border-radius: var(--radius-md);
   border: 1px solid rgba(0, 255, 154, 0.18);
   background: radial-gradient(circle at top left, #07141a 0, #020609 60%);
-  overflow: auto;       /* thin scrollbar appears only when needed */
+  overflow: auto;       /* scrollbar appears when rows overflow */
 }
 
 /* ========================================
@@ -371,6 +397,7 @@ textarea {
   font-size: 0.72rem;
 }
 
+/* Sticky header so it stays visible while scrolling */
 .matrix-table thead {
   position: sticky;
   top: 0;
@@ -404,7 +431,7 @@ textarea {
   vertical-align: top;
 }
 
-/* Column 1 (Category) and Column 3 (Price): normal size, no wrap */
+/* Category (col 1) and Price (col 3): normal size, no wrap */
 .matrix-table tbody td:nth-child(1),
 .matrix-table tbody td:nth-child(3) {
   font-size: 0.72rem;
@@ -444,7 +471,6 @@ tbody tr.selected-row {
   background: rgba(0, 100, 60, 0.9) !important;
 }
 
-/* Category cell: clickable for notes */
 .category-cell {
   cursor: pointer;
   color: var(--accent);
@@ -572,7 +598,13 @@ tbody tr.selected-row {
 @media (max-width: 980px) {
   .app-main {
     grid-template-columns: minmax(0, 1fr);
+    height: auto;
     overflow-y: auto;
+  }
+
+  .panel {
+    height: auto;
+    max-height: 80vh;
   }
 
   .form-grid {
