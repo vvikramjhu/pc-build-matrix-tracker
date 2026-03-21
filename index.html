@@ -7,13 +7,13 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <!-- MATRIX BACKGROUND: animated gradient overlay -->
+    <!-- MATRIX BACKGROUND -->
     <div class="matrix-bg"></div>
 
-    <!-- APP SHELL: main container spanning full viewport -->
+    <!-- APP SHELL -->
     <div class="app-shell">
-      
-      <!-- HEADER: logo and title bar -->
+
+      <!-- HEADER -->
       <header class="app-header">
         <div class="logo-lockup">
           <div class="logo-mark">λ</div>
@@ -26,268 +26,164 @@
         </div>
       </header>
 
-      <!-- MAIN LAYOUT: two-column grid (left form, right table) -->
+      <!-- MAIN LAYOUT -->
       <main class="app-main">
-        
-        <!-- LEFT PANEL: Part & Warranty Editor Form -->
+
+        <!-- LEFT PANEL: Form -->
         <section class="panel panel-left">
           <h2 class="panel-title">Part &amp; Warranty Editor</h2>
-          
-          <!-- FORM: all fields optional except PartName; empty fields auto-fill with dummy_ values -->
+
           <form id="part-form" class="matrix-form">
             <div class="form-grid">
-              
-              <!-- Category input -->
+
               <div class="form-group">
                 <label for="Category">Category</label>
                 <input id="Category" name="Category" placeholder="CPU, GPU, etc." />
               </div>
 
-              <!-- Part Name (required) -->
               <div class="form-group">
                 <label for="PartName">Part Name *</label>
-                <input
-                  id="PartName"
-                  name="PartName"
-                  placeholder="e.g. AMD Ryzen 9 9950X3D"
-                  required
-                />
+                <input id="PartName" name="PartName" placeholder="e.g. AMD Ryzen 9 9950X3D" required />
               </div>
 
-              <!-- Model / Capacity -->
               <div class="form-group">
                 <label for="Model">Model</label>
-                <input
-                  id="Model"
-                  name="Model"
-                  placeholder="Model / Capacity / Extra descriptor"
-                />
+                <input id="Model" name="Model" placeholder="Model / Capacity" />
               </div>
 
-              <!-- Vendor Name -->
               <div class="form-group">
                 <label for="VendorName">Vendor Name</label>
                 <input id="VendorName" name="VendorName" placeholder="Amazon, Newegg..." />
               </div>
 
-              <!-- Vendor Website -->
               <div class="form-group">
                 <label for="VendorWebsite">Vendor Website</label>
-                <input
-                  id="VendorWebsite"
-                  name="VendorWebsite"
-                  placeholder="https://..."
-                />
+                <input id="VendorWebsite" name="VendorWebsite" placeholder="https://..." />
               </div>
 
-              <!-- Vendor Login URL -->
-              <div class="form-group">
-                <label for="VendorLoginURL">Vendor Login URL</label>
-                <input
-                  id="VendorLoginURL"
-                  name="VendorLoginURL"
-                  placeholder="Login page URL"
-                />
-              </div>
-
-              <!-- Vendor Username -->
               <div class="form-group">
                 <label for="VendorUsername">Vendor Username</label>
                 <input id="VendorUsername" name="VendorUsername" />
               </div>
 
-              <!-- Vendor Password Hint -->
               <div class="form-group">
                 <label for="VendorPasswordHint">Vendor Password Hint</label>
                 <input id="VendorPasswordHint" name="VendorPasswordHint" />
               </div>
 
-              <!-- Vendor Support Email -->
-              <div class="form-group">
-                <label for="VendorSupportEmail">Vendor Support Email</label>
-                <input id="VendorSupportEmail" name="VendorSupportEmail" />
-              </div>
-
-              <!-- Vendor Support Phone -->
-              <div class="form-group">
-                <label for="VendorSupportPhone">Vendor Support Phone</label>
-                <input id="VendorSupportPhone" name="VendorSupportPhone" />
-              </div>
-
-              <!-- Purchase Date -->
               <div class="form-group">
                 <label for="PurchaseDate">Purchase Date</label>
                 <input id="PurchaseDate" name="PurchaseDate" type="date" />
               </div>
 
-              <!-- Price Paid -->
               <div class="form-group">
                 <label for="PricePaid">Price Paid</label>
                 <input id="PricePaid" name="PricePaid" type="number" step="0.01" />
               </div>
 
-              <!-- Currency -->
               <div class="form-group">
                 <label for="Currency">Currency</label>
                 <input id="Currency" name="Currency" placeholder="USD, EUR..." />
               </div>
 
-              <!-- Order ID -->
               <div class="form-group">
                 <label for="OrderID">Order ID</label>
                 <input id="OrderID" name="OrderID" />
               </div>
 
-              <!-- Serial Number -->
               <div class="form-group">
                 <label for="SerialNumber">Serial Number</label>
                 <input id="SerialNumber" name="SerialNumber" />
               </div>
 
-              <!-- Warranty Provider -->
               <div class="form-group">
                 <label for="WarrantyProvider">Warranty Provider</label>
                 <input id="WarrantyProvider" name="WarrantyProvider" />
               </div>
 
-              <!-- Warranty Type -->
               <div class="form-group">
                 <label for="WarrantyType">Warranty Type</label>
                 <input id="WarrantyType" name="WarrantyType" />
               </div>
 
-              <!-- Warranty Registration URL -->
               <div class="form-group">
                 <label for="WarrantyRegistrationURL">Warranty Registration URL</label>
-                <input
-                  id="WarrantyRegistrationURL"
-                  name="WarrantyRegistrationURL"
-                  placeholder="https://..."
-                />
+                <input id="WarrantyRegistrationURL" name="WarrantyRegistrationURL" placeholder="https://..." />
               </div>
 
-              <!-- Warranty Length (months) -->
               <div class="form-group">
                 <label for="WarrantyLengthMonths">Warranty Length (months)</label>
-                <input
-                  id="WarrantyLengthMonths"
-                  name="WarrantyLengthMonths"
-                  type="number"
-                />
+                <input id="WarrantyLengthMonths" name="WarrantyLengthMonths" type="number" />
               </div>
 
-              <!-- Warranty Start Date -->
               <div class="form-group">
                 <label for="WarrantyStartDate">Warranty Start Date</label>
                 <input id="WarrantyStartDate" name="WarrantyStartDate" type="date" />
               </div>
 
-              <!-- Warranty End Date -->
               <div class="form-group">
                 <label for="WarrantyEndDate">Warranty End Date</label>
                 <input id="WarrantyEndDate" name="WarrantyEndDate" type="date" />
               </div>
 
-              <!-- Warranty Support Email -->
               <div class="form-group">
                 <label for="WarrantySupportEmail">Warranty Support Email</label>
                 <input id="WarrantySupportEmail" name="WarrantySupportEmail" />
               </div>
 
-              <!-- Warranty Support Phone -->
               <div class="form-group">
                 <label for="WarrantySupportPhone">Warranty Support Phone</label>
                 <input id="WarrantySupportPhone" name="WarrantySupportPhone" />
               </div>
 
-              <!-- Extended Warranty Provider -->
               <div class="form-group">
                 <label for="ExtendedWarrantyProvider">Ext. Warranty Provider</label>
-                <input
-                  id="ExtendedWarrantyProvider"
-                  name="ExtendedWarrantyProvider"
-                />
+                <input id="ExtendedWarrantyProvider" name="ExtendedWarrantyProvider" />
               </div>
 
-              <!-- Extended Warranty Length (months) -->
               <div class="form-group">
-                <label for="ExtendedWarrantyLengthMonths">
-                  Ext. Warranty Length (months)
-                </label>
-                <input
-                  id="ExtendedWarrantyLengthMonths"
-                  name="ExtendedWarrantyLengthMonths"
-                  type="number"
-                />
+                <label for="ExtendedWarrantyLengthMonths">Ext. Warranty Length (months)</label>
+                <input id="ExtendedWarrantyLengthMonths" name="ExtendedWarrantyLengthMonths" type="number" />
               </div>
 
-              <!-- Extended Warranty Details -->
-              <div class="form-group">
+              <div class="form-group form-group-full">
                 <label for="ExtendedWarrantyDetails">Ext. Warranty Details</label>
-                <textarea
-                  id="ExtendedWarrantyDetails"
-                  name="ExtendedWarrantyDetails"
-                  rows="2"
-                ></textarea>
+                <textarea id="ExtendedWarrantyDetails" name="ExtendedWarrantyDetails" rows="2"></textarea>
               </div>
 
-              <!-- Extended Warranty Support Email -->
               <div class="form-group">
-                <label for="ExtendedWarrantySupportEmail">
-                  Ext. Warranty Support Email
-                </label>
-                <input
-                  id="ExtendedWarrantySupportEmail"
-                  name="ExtendedWarrantySupportEmail"
-                />
+                <label for="ExtendedWarrantySupportEmail">Ext. Warranty Support Email</label>
+                <input id="ExtendedWarrantySupportEmail" name="ExtendedWarrantySupportEmail" />
               </div>
 
-              <!-- Extended Warranty Support Phone -->
               <div class="form-group">
-                <label for="ExtendedWarrantySupportPhone">
-                  Ext. Warranty Support Phone
-                </label>
-                <input
-                  id="ExtendedWarrantySupportPhone"
-                  name="ExtendedWarrantySupportPhone"
-                />
+                <label for="ExtendedWarrantySupportPhone">Ext. Warranty Support Phone</label>
+                <input id="ExtendedWarrantySupportPhone" name="ExtendedWarrantySupportPhone" />
               </div>
 
-              <!-- Notes (full width) -->
               <div class="form-group form-group-full">
                 <label for="Notes">Notes</label>
                 <textarea id="Notes" name="Notes" rows="2"></textarea>
               </div>
+
             </div>
 
-            <!-- FORM ACTIONS: Save, Clear, Delete buttons -->
+            <!-- FORM ACTIONS -->
             <div class="form-actions">
               <button type="submit" class="btn-primary">Save (Add / Update)</button>
-              <button type="button" id="reset-form" class="btn-secondary">
-                New / Clear
-              </button>
-              <button type="button" id="delete-part" class="btn-secondary btn-danger">
-                Delete Selected
-              </button>
+              <button type="button" id="reset-form" class="btn-secondary">New / Clear</button>
+              <button type="button" id="delete-part" class="btn-secondary btn-danger">Delete Selected</button>
             </div>
           </form>
         </section>
 
-        <!-- RIGHT PANEL: Parts Matrix Table -->
+        <!-- RIGHT PANEL: Table -->
         <section class="panel panel-right">
-          
-          <!-- PANEL HEADER: title, search, filter, export buttons -->
+
           <div class="panel-header">
             <h2 class="panel-title">Parts Matrix</h2>
             <div class="panel-controls">
-              <!-- Search input -->
-              <input
-                type="text"
-                id="search-input"
-                class="search-input"
-                placeholder="Search parts, vendors, notes..."
-              />
-              <!-- Category filter dropdown -->
+              <input type="text" id="search-input" class="search-input" placeholder="Search parts, vendors, notes..." />
               <select id="category-filter" class="filter-select">
                 <option value="">All Categories</option>
                 <option value="CPU">CPU</option>
@@ -300,71 +196,55 @@
                 <option value="Case Fan">Case Fan</option>
                 <option value="Monitor">Monitor</option>
               </select>
-              <!-- Export buttons -->
               <div class="table-actions">
-                <button type="button" id="download-csv" class="btn-ghost">
-                  Download CSV (Table)
-                </button>
-                <button type="button" id="download-pdf" class="btn-ghost">
-                  Download PDF (Table)
-                </button>
+                <button type="button" id="download-csv" class="btn-ghost">Download CSV</button>
+                <button type="button" id="download-pdf" class="btn-ghost">Download PDF</button>
               </div>
             </div>
           </div>
 
-          <!-- TABLE WRAPPER: contains resizable table; limited to ~9 rows height -->
+          <!-- TABLE WRAPPER: thin scrollbar, fills remaining space -->
           <div class="table-wrapper">
             <table id="parts-table" class="matrix-table">
               <thead>
                 <tr>
-                  <!-- Category column is clickable to open notes popup -->
-                  <th class="resizable-th col-category">Category</th>
-                  <th class="resizable-th col-small">Part</th>
-                  <th class="resizable-th col-small">Vendor</th>
-                  <th class="resizable-th col-price">Price</th>
-                  <th class="resizable-th col-small">Warranty</th>
-                  <th class="resizable-th col-small">Ext. Warranty</th>
-                  <th class="resizable-th col-small">Vendor Contact</th>
-                  <th class="resizable-th col-small">Warranty Contact</th>
+                  <th class="resizable-th">Category</th>
+                  <th class="resizable-th">Part</th>
+                  <th class="resizable-th">Price</th>
+                  <th class="resizable-th">Vendor</th>
+                  <th class="resizable-th">Order #</th>
+                  <th class="resizable-th">Warranty Owner</th>
+                  <th class="resizable-th">Start Date</th>
+                  <th class="resizable-th">End Date</th>
                 </tr>
               </thead>
-              <tbody>
-                <!-- Rows filled by JS; clicking Category cell opens notes modal -->
-              </tbody>
+              <tbody></tbody>
             </table>
           </div>
 
-          <!-- TOTALS BAR: displays sum of all visible part prices -->
+          <!-- TOTALS BAR -->
           <div id="totals-bar" class="totals-bar"></div>
         </section>
       </main>
     </div>
 
-    <!-- NOTES MODAL: popup for editing part notes (triggered by clicking Category) -->
+    <!-- NOTES MODAL -->
     <div id="modal-backdrop" class="modal-backdrop hidden"></div>
-
     <div id="notes-modal" class="modal hidden">
       <div class="modal-content">
         <button class="modal-close" id="notes-close">×</button>
         <h3>Part Notes</h3>
         <div id="notes-title" class="modal-title"></div>
-
         <label for="notes-textarea">Notes</label>
         <textarea id="notes-textarea" rows="6"></textarea>
-
         <div class="modal-actions">
-          <button type="button" id="notes-save" class="btn-primary">
-            Save
-          </button>
+          <button type="button" id="notes-save" class="btn-primary">Save</button>
         </div>
       </div>
     </div>
 
-    <!-- PDF EXPORT LIBRARIES: jsPDF + autoTable plugin -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>
-
-    <!-- MAIN APP SCRIPT -->
     <script src="app.js"></script>
   </body>
 </html>

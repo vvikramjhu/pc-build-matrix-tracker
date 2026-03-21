@@ -18,6 +18,10 @@
   --grid-gap: 1.25rem;
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
     "Segoe UI", sans-serif;
+  /* Thin scrollbar colors */
+  --scrollbar-track: rgba(0, 0, 0, 0.3);
+  --scrollbar-thumb: rgba(0, 255, 154, 0.35);
+  --scrollbar-thumb-hover: rgba(0, 255, 154, 0.65);
 }
 
 /* ========================================
@@ -29,7 +33,6 @@
   box-sizing: border-box;
 }
 
-/* Full viewport, no scrollbars */
 html,
 body {
   margin: 0;
@@ -40,14 +43,32 @@ body {
   color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
-  overflow: hidden; /* no page scrollbar */
+  overflow: hidden; /* no outer page scrollbar */
 }
 
-/* Hide all scrollbars in WebKit browsers */
-body::-webkit-scrollbar,
-*::-webkit-scrollbar {
-  width: 0;
-  height: 0;
+/* ========================================
+   THIN SCROLLBAR — global utility
+   Applied only where overflow is set to auto/scroll
+   ======================================== */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+/* Firefox thin scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 }
 
 /* ========================================
@@ -74,7 +95,7 @@ body::-webkit-scrollbar,
 }
 
 /* ========================================
-   APP SHELL: main container
+   APP SHELL
    ======================================== */
 .app-shell {
   position: relative;
@@ -82,17 +103,14 @@ body::-webkit-scrollbar,
   padding: 0.75rem;
   width: 100vw;
   height: 100vh;
-  border-radius: 0;
-  border: none;
   background: radial-gradient(circle at top left, #071b21 0, #020609 60%);
-  box-shadow: none;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* no scrollbars inside */
+  overflow: hidden;
 }
 
 /* ========================================
-   HEADER: logo and title bar
+   HEADER
    ======================================== */
 .app-header {
   flex: 0 0 auto;
@@ -151,13 +169,11 @@ body::-webkit-scrollbar,
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.4fr);
   gap: var(--grid-gap);
-  padding: 0;
-  height: calc(100% - 0.6rem);
-  min-height: 0; /* allow flexbox to shrink */
+  min-height: 0;
 }
 
 /* ========================================
-   PANELS: left (form) and right (table)
+   PANELS
    ======================================== */
 .panel {
   background: radial-gradient(circle at top left, #07141a 0, #020609 60%);
@@ -167,7 +183,8 @@ body::-webkit-scrollbar,
   padding: 0.8rem;
   display: flex;
   flex-direction: column;
-  min-height: 0; /* allow flexbox to shrink */
+  min-height: 0;
+  overflow: hidden;
 }
 
 .panel-title {
@@ -176,24 +193,24 @@ body::-webkit-scrollbar,
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--accent);
+  flex: 0 0 auto;
 }
 
 /* ========================================
-   LEFT PANEL: FORM
+   LEFT PANEL: FORM — thin scrollbar, no outer scroll
    ======================================== */
 .matrix-form {
   flex: 1 1 auto;
   min-height: 0;
-  padding-right: 0.2rem;
-  overflow: hidden; /* no scroll; form sized to fit */
+  overflow-y: auto;   /* thin scrollbar on form */
+  overflow-x: hidden;
+  padding-right: 0.3rem;
 }
 
-/* Form grid: 2 columns */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.4rem 0.5rem;
-  font-size: 0.78rem;
 }
 
 .form-group {
@@ -201,7 +218,6 @@ body::-webkit-scrollbar,
   flex-direction: column;
 }
 
-/* Full-width form group (e.g. Notes) */
 .form-group-full {
   grid-column: 1 / -1;
 }
@@ -212,7 +228,6 @@ label {
   margin-bottom: 0.1rem;
 }
 
-/* Input, select, textarea styling */
 input,
 select,
 textarea {
@@ -233,21 +248,22 @@ textarea:focus {
 }
 
 textarea {
-  resize: none; /* no resize -> keeps height stable */
+  resize: none;
   min-height: 1.8rem;
   max-height: 3rem;
 }
 
-/* Form action buttons container */
 .form-actions {
+  flex: 0 0 auto;
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
   margin-top: 0.45rem;
+  padding-top: 0.3rem;
 }
 
 /* ========================================
-   BUTTONS: primary, secondary, ghost, danger
+   BUTTONS
    ======================================== */
 .btn-primary,
 .btn-secondary,
@@ -266,27 +282,19 @@ textarea {
 }
 
 .btn-primary {
-  background: linear-gradient(
-    135deg,
-    rgba(0, 255, 154, 0.95),
-    rgba(0, 190, 255, 0.9)
-  );
+  background: linear-gradient(135deg, rgba(0, 255, 154, 0.95), rgba(0, 190, 255, 0.9));
   color: #000;
   border-color: transparent;
 }
 
-.btn-primary:hover {
-  filter: brightness(1.1);
-}
+.btn-primary:hover { filter: brightness(1.1); }
 
 .btn-secondary {
   border-color: rgba(0, 255, 154, 0.3);
   color: var(--accent);
 }
 
-.btn-secondary:hover {
-  background: rgba(0, 255, 154, 0.1);
-}
+.btn-secondary:hover { background: rgba(0, 255, 154, 0.1); }
 
 .btn-ghost {
   border-color: rgba(0, 255, 154, 0.25);
@@ -309,7 +317,7 @@ textarea {
 }
 
 /* ========================================
-   RIGHT PANEL: TABLE
+   RIGHT PANEL: TABLE HEADER CONTROLS
    ======================================== */
 .panel-header {
   flex: 0 0 auto;
@@ -341,27 +349,32 @@ textarea {
   gap: 0.3rem;
 }
 
-/* Table wrapper: increased height to show Monitor + 4 empty rows (total ~13 rows visible) */
+/* ========================================
+   TABLE WRAPPER: flex-grow, thin scrollbar
+   ======================================== */
 .table-wrapper {
-  flex: 0 0 auto;
-  height: 420px; /* increased from 320px to accommodate more rows */
+  flex: 1 1 auto;       /* fills all remaining space in right panel */
+  min-height: 0;
   border-radius: var(--radius-md);
   border: 1px solid rgba(0, 255, 154, 0.18);
   background: radial-gradient(circle at top left, #07141a 0, #020609 60%);
-  overflow: hidden; /* no inner scrollbar */
+  overflow: auto;       /* thin scrollbar appears only when needed */
 }
 
 /* ========================================
-   TABLE: resizable columns with wrapping text
+   TABLE
    ======================================== */
 .matrix-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; /* required for resizable columns */
+  table-layout: fixed;
   font-size: 0.72rem;
 }
 
 .matrix-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
   background: linear-gradient(
     to right,
     rgba(0, 12, 10, 0.98),
@@ -369,7 +382,6 @@ textarea {
   );
 }
 
-/* Resizable table header */
 .resizable-th {
   position: relative;
   padding: 0.3rem 0.4rem;
@@ -379,72 +391,44 @@ textarea {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  resize: horizontal; /* enables column resizing in some browsers */
+  resize: horizontal;
 }
 
-/* Default table cell styling */
 .matrix-table th,
 .matrix-table td {
   padding: 0.3rem 0.4rem;
-  border-bottom: 1px solid rgba(0, 255, 154, 0.12);
+  border-bottom: 1px solid rgba(0, 255, 154, 0.08);
   vertical-align: top;
 }
 
-/* Category column: normal font size, no wrap */
-.matrix-table .col-category {
+/* Column 1 (Category) and Column 3 (Price): normal size, no wrap */
+.matrix-table tbody td:nth-child(1),
+.matrix-table tbody td:nth-child(3) {
   font-size: 0.72rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Price column: normal font size, no wrap */
-.matrix-table .col-price {
-  font-size: 0.72rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Small columns: smaller font (7-8px equivalent = 0.5rem), wrapping enabled */
-.matrix-table .col-small {
-  font-size: 0.5rem; /* ~8px on most browsers */
-  white-space: normal; /* allow wrapping */
+/* All other columns: small font, wrapping */
+.matrix-table tbody td:nth-child(2),
+.matrix-table tbody td:nth-child(4),
+.matrix-table tbody td:nth-child(5),
+.matrix-table tbody td:nth-child(6),
+.matrix-table tbody td:nth-child(7),
+.matrix-table tbody td:nth-child(8) {
+  font-size: 0.5rem;
+  white-space: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
   line-height: 1.3;
-}
-
-/* Apply small font to tbody cells in small columns */
-.matrix-table tbody td:nth-child(2), /* Part */
-.matrix-table tbody td:nth-child(3), /* Vendor */
-.matrix-table tbody td:nth-child(5), /* Warranty */
-.matrix-table tbody td:nth-child(6), /* Ext. Warranty */
-.matrix-table tbody td:nth-child(7), /* Vendor Contact */
-.matrix-table tbody td:nth-child(8)  /* Warranty Contact */
-{
-  font-size: 0.5rem; /* ~8px */
-  white-space: normal; /* allow wrapping */
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  line-height: 1.3;
-}
-
-/* Category and Price columns keep normal size */
-.matrix-table tbody td:nth-child(1), /* Category */
-.matrix-table tbody td:nth-child(4)  /* Price */
-{
-  font-size: 0.72rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .matrix-table tbody tr {
-  transition: background 0.12s ease-out, box-shadow 0.12s ease-out;
+  transition: background 0.12s ease-out;
   cursor: pointer;
 }
 
@@ -456,12 +440,11 @@ textarea {
   background: rgba(0, 80, 40, 0.85);
 }
 
-/* Selected row highlight */
 tbody tr.selected-row {
   background: rgba(0, 100, 60, 0.9) !important;
 }
 
-/* Category cell: clickable to open notes popup */
+/* Category cell: clickable for notes */
 .category-cell {
   cursor: pointer;
   color: var(--accent);
@@ -473,7 +456,7 @@ tbody tr.selected-row {
 }
 
 /* ========================================
-   TOTALS BAR: sum of visible part prices
+   TOTALS BAR
    ======================================== */
 .totals-bar {
   flex: 0 0 auto;
@@ -491,14 +474,14 @@ tbody tr.selected-row {
 }
 
 /* ========================================
-   BADGE STYLES: warranty indicators
+   BADGES
    ======================================== */
 .badge {
   display: inline-flex;
   align-items: center;
   padding: 0.1rem 0.35rem;
   border-radius: 999px;
-  font-size: 0.45rem; /* smaller badge text for small columns */
+  font-size: 0.45rem;
   border: 1px solid transparent;
 }
 
@@ -513,7 +496,7 @@ tbody tr.selected-row {
 }
 
 /* ========================================
-   MODAL: notes popup (triggered by Category click)
+   MODAL
    ======================================== */
 .modal-backdrop {
   position: fixed;
@@ -575,9 +558,7 @@ tbody tr.selected-row {
   cursor: pointer;
 }
 
-.modal-close:hover {
-  color: var(--accent);
-}
+.modal-close:hover { color: var(--accent); }
 
 .modal-actions {
   display: flex;
@@ -586,15 +567,12 @@ tbody tr.selected-row {
 }
 
 /* ========================================
-   RESPONSIVE: single column on small screens
+   RESPONSIVE
    ======================================== */
 @media (max-width: 980px) {
   .app-main {
     grid-template-columns: minmax(0, 1fr);
-  }
-
-  .panel-right {
-    margin-top: 0.5rem;
+    overflow-y: auto;
   }
 
   .form-grid {
