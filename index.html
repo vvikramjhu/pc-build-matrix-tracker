@@ -31,138 +31,226 @@
 
         <!-- LEFT PANEL: Form -->
         <section class="panel panel-left">
-          <h2 class="panel-title">Part &amp; Warranty Editor</h2>
+
+          <!-- Panel title + copy-all icon -->
+          <div class="panel-title-row">
+            <h2 class="panel-title">Part &amp; Warranty Editor</h2>
+            <button
+              type="button"
+              id="copy-all-form"
+              class="copy-all-btn"
+              title="Copy entire form"
+            >&#x2398; Copy All</button>
+          </div>
 
           <form id="part-form" class="matrix-form">
             <div class="form-grid">
 
               <div class="form-group">
-                <label for="Category">Category</label>
+                <div class="field-label-row">
+                  <label for="Category">Category</label>
+                  <button type="button" class="copy-field-btn" data-field="Category" title="Copy">&#x2398;</button>
+                </div>
                 <input id="Category" name="Category" placeholder="CPU, GPU, etc." />
               </div>
 
               <div class="form-group">
-                <label for="PartName">Part Name *</label>
+                <div class="field-label-row">
+                  <label for="PartName">Part Name *</label>
+                  <button type="button" class="copy-field-btn" data-field="PartName" title="Copy">&#x2398;</button>
+                </div>
                 <input id="PartName" name="PartName" placeholder="e.g. AMD Ryzen 9 9950X3D" required />
               </div>
 
               <div class="form-group">
-                <label for="Model">Model</label>
+                <div class="field-label-row">
+                  <label for="Model">Model</label>
+                  <button type="button" class="copy-field-btn" data-field="Model" title="Copy">&#x2398;</button>
+                </div>
                 <input id="Model" name="Model" placeholder="Model / Capacity" />
               </div>
 
               <div class="form-group">
-                <label for="VendorName">Vendor Name</label>
+                <div class="field-label-row">
+                  <label for="VendorName">Vendor Name</label>
+                  <button type="button" class="copy-field-btn" data-field="VendorName" title="Copy">&#x2398;</button>
+                </div>
                 <input id="VendorName" name="VendorName" placeholder="Amazon, Newegg..." />
               </div>
 
               <div class="form-group">
-                <label for="VendorWebsite">Vendor Website</label>
+                <div class="field-label-row">
+                  <label for="VendorWebsite">Vendor Website</label>
+                  <button type="button" class="copy-field-btn" data-field="VendorWebsite" title="Copy">&#x2398;</button>
+                </div>
                 <input id="VendorWebsite" name="VendorWebsite" placeholder="https://..." />
               </div>
 
               <div class="form-group">
-                <label for="VendorUsername">Vendor Username</label>
+                <div class="field-label-row">
+                  <label for="VendorUsername">Vendor Username</label>
+                  <button type="button" class="copy-field-btn" data-field="VendorUsername" title="Copy">&#x2398;</button>
+                </div>
                 <input id="VendorUsername" name="VendorUsername" />
               </div>
 
               <div class="form-group">
-                <label for="VendorPasswordHint">Vendor Password Hint</label>
+                <div class="field-label-row">
+                  <label for="VendorPasswordHint">Vendor Password Hint</label>
+                  <button type="button" class="copy-field-btn" data-field="VendorPasswordHint" title="Copy">&#x2398;</button>
+                </div>
                 <input id="VendorPasswordHint" name="VendorPasswordHint" />
               </div>
 
               <div class="form-group">
-                <label for="PurchaseDate">Purchase Date</label>
+                <div class="field-label-row">
+                  <label for="PurchaseDate">Purchase Date</label>
+                  <button type="button" class="copy-field-btn" data-field="PurchaseDate" title="Copy">&#x2398;</button>
+                </div>
                 <input id="PurchaseDate" name="PurchaseDate" type="date" />
               </div>
 
               <div class="form-group">
-                <label for="PricePaid">Price Paid</label>
+                <div class="field-label-row">
+                  <label for="PricePaid">Price Paid</label>
+                  <button type="button" class="copy-field-btn" data-field="PricePaid" title="Copy">&#x2398;</button>
+                </div>
                 <input id="PricePaid" name="PricePaid" type="number" step="0.01" />
               </div>
 
               <div class="form-group">
-                <label for="Currency">Currency</label>
+                <div class="field-label-row">
+                  <label for="Currency">Currency</label>
+                  <button type="button" class="copy-field-btn" data-field="Currency" title="Copy">&#x2398;</button>
+                </div>
                 <input id="Currency" name="Currency" placeholder="USD, EUR..." />
               </div>
 
               <div class="form-group">
-                <label for="OrderID">Order ID</label>
+                <div class="field-label-row">
+                  <label for="OrderID">Order ID</label>
+                  <button type="button" class="copy-field-btn" data-field="OrderID" title="Copy">&#x2398;</button>
+                </div>
                 <input id="OrderID" name="OrderID" />
               </div>
 
               <div class="form-group">
-                <label for="SerialNumber">Serial Number</label>
+                <div class="field-label-row">
+                  <label for="SerialNumber">Serial Number</label>
+                  <button type="button" class="copy-field-btn" data-field="SerialNumber" title="Copy">&#x2398;</button>
+                </div>
                 <input id="SerialNumber" name="SerialNumber" />
               </div>
 
               <div class="form-group">
-                <label for="WarrantyProvider">Warranty Provider</label>
+                <div class="field-label-row">
+                  <label for="WarrantyProvider">Warranty Provider</label>
+                  <button type="button" class="copy-field-btn" data-field="WarrantyProvider" title="Copy">&#x2398;</button>
+                </div>
                 <input id="WarrantyProvider" name="WarrantyProvider" />
               </div>
 
               <div class="form-group">
-                <label for="WarrantyType">Warranty Type</label>
+                <div class="field-label-row">
+                  <label for="WarrantyType">Warranty Type</label>
+                  <button type="button" class="copy-field-btn" data-field="WarrantyType" title="Copy">&#x2398;</button>
+                </div>
                 <input id="WarrantyType" name="WarrantyType" />
               </div>
 
               <div class="form-group">
-                <label for="WarrantyRegistrationURL">Warranty Registration URL</label>
+                <div class="field-label-row">
+                  <label for="WarrantyRegistrationURL">Warranty Registration URL</label>
+                  <button type="button" class="copy-field-btn" data-field="WarrantyRegistrationURL" title="Copy">&#x2398;</button>
+                </div>
                 <input id="WarrantyRegistrationURL" name="WarrantyRegistrationURL" placeholder="https://..." />
               </div>
 
               <div class="form-group">
-                <label for="WarrantyLengthMonths">Warranty Length (months)</label>
+                <div class="field-label-row">
+                  <label for="WarrantyLengthMonths">Warranty Length (months)</label>
+                  <button type="button" class="copy-field-btn" data-field="WarrantyLengthMonths" title="Copy">&#x2398;</button>
+                </div>
                 <input id="WarrantyLengthMonths" name="WarrantyLengthMonths" type="number" />
               </div>
 
               <div class="form-group">
-                <label for="WarrantyStartDate">Warranty Start Date</label>
+                <div class="field-label-row">
+                  <label for="WarrantyStartDate">Warranty Start Date</label>
+                  <button type="button" class="copy-field-btn" data-field="WarrantyStartDate" title="Copy">&#x2398;</button>
+                </div>
                 <input id="WarrantyStartDate" name="WarrantyStartDate" type="date" />
               </div>
 
               <div class="form-group">
-                <label for="WarrantyEndDate">Warranty End Date</label>
+                <div class="field-label-row">
+                  <label for="WarrantyEndDate">Warranty End Date</label>
+                  <button type="button" class="copy-field-btn" data-field="WarrantyEndDate" title="Copy">&#x2398;</button>
+                </div>
                 <input id="WarrantyEndDate" name="WarrantyEndDate" type="date" />
               </div>
 
               <div class="form-group">
-                <label for="WarrantySupportEmail">Warranty Support Email</label>
+                <div class="field-label-row">
+                  <label for="WarrantySupportEmail">Warranty Support Email</label>
+                  <button type="button" class="copy-field-btn" data-field="WarrantySupportEmail" title="Copy">&#x2398;</button>
+                </div>
                 <input id="WarrantySupportEmail" name="WarrantySupportEmail" />
               </div>
 
               <div class="form-group">
-                <label for="WarrantySupportPhone">Warranty Support Phone</label>
+                <div class="field-label-row">
+                  <label for="WarrantySupportPhone">Warranty Support Phone</label>
+                  <button type="button" class="copy-field-btn" data-field="WarrantySupportPhone" title="Copy">&#x2398;</button>
+                </div>
                 <input id="WarrantySupportPhone" name="WarrantySupportPhone" />
               </div>
 
               <div class="form-group">
-                <label for="ExtendedWarrantyProvider">Ext. Warranty Provider</label>
+                <div class="field-label-row">
+                  <label for="ExtendedWarrantyProvider">Ext. Warranty Provider</label>
+                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantyProvider" title="Copy">&#x2398;</button>
+                </div>
                 <input id="ExtendedWarrantyProvider" name="ExtendedWarrantyProvider" />
               </div>
 
               <div class="form-group">
-                <label for="ExtendedWarrantyLengthMonths">Ext. Warranty Length (months)</label>
+                <div class="field-label-row">
+                  <label for="ExtendedWarrantyLengthMonths">Ext. Warranty Length (months)</label>
+                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantyLengthMonths" title="Copy">&#x2398;</button>
+                </div>
                 <input id="ExtendedWarrantyLengthMonths" name="ExtendedWarrantyLengthMonths" type="number" />
               </div>
 
               <div class="form-group form-group-full">
-                <label for="ExtendedWarrantyDetails">Ext. Warranty Details</label>
+                <div class="field-label-row">
+                  <label for="ExtendedWarrantyDetails">Ext. Warranty Details</label>
+                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantyDetails" title="Copy">&#x2398;</button>
+                </div>
                 <textarea id="ExtendedWarrantyDetails" name="ExtendedWarrantyDetails" rows="2"></textarea>
               </div>
 
               <div class="form-group">
-                <label for="ExtendedWarrantySupportEmail">Ext. Warranty Support Email</label>
+                <div class="field-label-row">
+                  <label for="ExtendedWarrantySupportEmail">Ext. Warranty Support Email</label>
+                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantySupportEmail" title="Copy">&#x2398;</button>
+                </div>
                 <input id="ExtendedWarrantySupportEmail" name="ExtendedWarrantySupportEmail" />
               </div>
 
               <div class="form-group">
-                <label for="ExtendedWarrantySupportPhone">Ext. Warranty Support Phone</label>
+                <div class="field-label-row">
+                  <label for="ExtendedWarrantySupportPhone">Ext. Warranty Support Phone</label>
+                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantySupportPhone" title="Copy">&#x2398;</button>
+                </div>
                 <input id="ExtendedWarrantySupportPhone" name="ExtendedWarrantySupportPhone" />
               </div>
 
               <div class="form-group form-group-full">
-                <label for="Notes">Notes</label>
+                <div class="field-label-row">
+                  <label for="Notes">Notes</label>
+                  <button type="button" class="copy-field-btn" data-field="Notes" title="Copy">&#x2398;</button>
+                </div>
                 <textarea id="Notes" name="Notes" rows="2"></textarea>
               </div>
 
@@ -203,7 +291,6 @@
             </div>
           </div>
 
-          <!-- TABLE WRAPPER: thin scrollbar, fills remaining space -->
           <div class="table-wrapper">
             <table id="parts-table" class="matrix-table">
               <thead>
@@ -222,7 +309,6 @@
             </table>
           </div>
 
-          <!-- TOTALS BAR -->
           <div id="totals-bar" class="totals-bar"></div>
         </section>
       </main>
@@ -242,6 +328,9 @@
         </div>
       </div>
     </div>
+
+    <!-- COPY TOAST -->
+    <div id="copy-toast" class="copy-toast hidden">Copied!</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.1/jspdf.plugin.autotable.min.js"></script>

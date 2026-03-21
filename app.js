@@ -23,24 +23,41 @@ let selectedIndex = null;
 let notesIndex = null;
 
 /* ========================================
+   ALL FORM FIELD NAMES (in display order)
+   ======================================== */
+const FIELD_NAMES = [
+  "Category","PartName","Model","VendorName","VendorWebsite",
+  "VendorUsername","VendorPasswordHint",
+  "PurchaseDate","PricePaid","Currency","OrderID","SerialNumber",
+  "WarrantyProvider","WarrantyType","WarrantyRegistrationURL",
+  "WarrantyLengthMonths","WarrantyStartDate","WarrantyEndDate",
+  "WarrantySupportEmail","WarrantySupportPhone",
+  "ExtendedWarrantyProvider","ExtendedWarrantyLengthMonths",
+  "ExtendedWarrantyDetails","ExtendedWarrantySupportEmail",
+  "ExtendedWarrantySupportPhone","Notes"
+];
+
+/* ========================================
    DOM REFERENCES
    ======================================== */
-const tableBody = document.querySelector("#parts-table tbody");
-const searchInput = document.querySelector("#search-input");
-const categoryFilter = document.querySelector("#category-filter");
-const form = document.querySelector("#part-form");
-const resetFormBtn = document.querySelector("#reset-form");
-const deleteBtn = document.querySelector("#delete-part");
-const downloadCsvBtn = document.querySelector("#download-csv");
-const downloadPdfBtn = document.querySelector("#download-pdf");
-const totalsBar = document.querySelector("#totals-bar");
+const tableBody       = document.querySelector("#parts-table tbody");
+const searchInput     = document.querySelector("#search-input");
+const categoryFilter  = document.querySelector("#category-filter");
+const form            = document.querySelector("#part-form");
+const resetFormBtn    = document.querySelector("#reset-form");
+const deleteBtn       = document.querySelector("#delete-part");
+const downloadCsvBtn  = document.querySelector("#download-csv");
+const downloadPdfBtn  = document.querySelector("#download-pdf");
+const totalsBar       = document.querySelector("#totals-bar");
+const copyAllBtn      = document.querySelector("#copy-all-form");
+const copyToast       = document.querySelector("#copy-toast");
 
-const notesModal = document.querySelector("#notes-modal");
-const modalBackdrop = document.querySelector("#modal-backdrop");
-const notesCloseBtn = document.querySelector("#notes-close");
-const notesSaveBtn = document.querySelector("#notes-save");
-const notesTextarea = document.querySelector("#notes-textarea");
-const notesTitle = document.querySelector("#notes-title");
+const notesModal      = document.querySelector("#notes-modal");
+const modalBackdrop   = document.querySelector("#modal-backdrop");
+const notesCloseBtn   = document.querySelector("#notes-close");
+const notesSaveBtn    = document.querySelector("#notes-save");
+const notesTextarea   = document.querySelector("#notes-textarea");
+const notesTitle      = document.querySelector("#notes-title");
 
 /* ========================================
    LOAD DATA
@@ -73,20 +90,17 @@ function formatPrice(p) {
 
 /* ========================================
    RENDER TABLE
-   Columns: Category | Part | Price | Vendor | Order # | Warranty Owner | Start Date | End Date
    ======================================== */
 function renderTable() {
   if (!filteredParts.length) {
-    tableBody.innerHTML =
-      '<tr><td colspan="8">No parts found.</td></tr>';
+    tableBody.innerHTML = '<tr><td colspan="8">No parts found.</td></tr>';
     updateTotals();
     return;
   }
 
   tableBody.innerHTML = filteredParts.map((p) => {
     const masterIndex = parts.indexOf(p);
-    const isSelected = masterIndex === selectedIndex;
-
+    const isSelected  = masterIndex === selectedIndex;
     const partDisplay = [p.PartName, p.Model].filter(Boolean).join(" — ");
     const vendor = p.VendorWebsite
       ? `<a href="${p.VendorWebsite}" target="_blank">${p.VendorName || "Vendor"}</a>`
@@ -128,7 +142,7 @@ function updateTotals() {
    FILTER LOGIC
    ======================================== */
 function applyFilters() {
-  const q = (searchInput.value || "").toLowerCase();
+  const q   = (searchInput.value || "").toLowerCase();
   const cat = categoryFilter.value;
 
   filteredParts = parts.filter((p) => {
@@ -146,7 +160,7 @@ function applyFilters() {
    ======================================== */
 function formToObject(formEl) {
   const data = new FormData(formEl);
-  const obj = {};
+  const obj  = {};
   for (const [key, val] of data.entries()) {
     obj[key] = val.trim() || `dummy_${key}`;
   }
@@ -154,18 +168,7 @@ function formToObject(formEl) {
 }
 
 function populateFormFromPart(part) {
-  const fields = [
-    "Category","PartName","Model","VendorName","VendorWebsite",
-    "VendorUsername","VendorPasswordHint",
-    "PurchaseDate","PricePaid","Currency","OrderID","SerialNumber",
-    "WarrantyProvider","WarrantyType","WarrantyRegistrationURL",
-    "WarrantyLengthMonths","WarrantyStartDate","WarrantyEndDate",
-    "WarrantySupportEmail","WarrantySupportPhone",
-    "ExtendedWarrantyProvider","ExtendedWarrantyLengthMonths",
-    "ExtendedWarrantyDetails","ExtendedWarrantySupportEmail",
-    "ExtendedWarrantySupportPhone","Notes"
-  ];
-  fields.forEach((name) => {
+  FIELD_NAMES.forEach((name) => {
     const input = form.querySelector(`[name="${name}"]`);
     if (input) input.value = part[name] || "";
   });
@@ -176,13 +179,62 @@ function clearSelectionHighlight() {
 }
 
 /* ========================================
+   COPY HELPERS
+   ======================================== */
+
+/** Show a brief "Copied!" toast */
+function showToast() {
+  copyToast.classList.remove("hidden");
+  setTimeout(() => copyToast.classList.add("hidden"), 1600);
+}
+
+/** Copy a single field value to clipboard */
+function copyField(fieldName) {
+  const el = form.querySelector(`[name="${fieldName}"]`);
+  if (!el) return;
+  const val = el.value.trim();
+  navigator.clipboard.writeText(val).then(showToast).catch(() => {
+    // fallback for older browsers
+    const ta = document.createElement("textarea");
+    ta.value = val;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    showToast();
+  });
+}
+
+/** Copy all form fields as "Label: Value" lines */
+function copyAllForm() {
+  const lines = FIELD_NAMES.map((name) => {
+    const el  = form.querySelector(`[name="${name}"]`);
+    const val = el ? el.value.trim() : "";
+    // Convert camelCase field name to readable label
+    const label = name.replace(/([A-Z])/g, " $1").trim();
+    return `${label}: ${val}`;
+  });
+  const text = lines.join("\n");
+  navigator.clipboard.writeText(text).then(showToast).catch(() => {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    showToast();
+  });
+}
+
+/* ========================================
    NOTES MODAL
    ======================================== */
 function openNotesModal(index) {
   notesIndex = index;
   const part = parts[index];
   if (!part) return;
-  notesTitle.textContent = [part.PartName, part.Model].filter(Boolean).join(" — ") || "Part Notes";
+  notesTitle.textContent =
+    [part.PartName, part.Model].filter(Boolean).join(" — ") || "Part Notes";
   notesTextarea.value = part.Notes || "";
   modalBackdrop.classList.remove("hidden");
   notesModal.classList.remove("hidden");
@@ -200,18 +252,20 @@ function closeNotesModal() {
 function downloadCsvSnapshot() {
   const source = filteredParts.length ? filteredParts : parts;
   if (!source.length) return;
-  const headers = ["Category","PartName","Price","VendorName","OrderID","WarrantyProvider","WarrantyStartDate","WarrantyEndDate"];
+  const headers = ["Category","PartName","Price","VendorName","OrderID",
+                   "WarrantyProvider","WarrantyStartDate","WarrantyEndDate"];
   const rows = [
     headers.join(","),
-    ...source.map((p) => [
-      p.Category, p.PartName, formatPrice(p), p.VendorName,
-      p.OrderID, p.WarrantyProvider, p.WarrantyStartDate, p.WarrantyEndDate
-    ].map((v) => (v || "").replace(/,/g, " ")).join(","))
+    ...source.map((p) =>
+      [p.Category, p.PartName, formatPrice(p), p.VendorName,
+       p.OrderID, p.WarrantyProvider, p.WarrantyStartDate, p.WarrantyEndDate]
+      .map((v) => (v || "").replace(/,/g, " ")).join(",")
+    )
   ];
   const blob = new Blob([rows.join("\n")], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement("a");
+  a.href     = url;
   a.download = "pc_parts_table.csv";
   document.body.appendChild(a);
   a.click();
@@ -227,13 +281,15 @@ function downloadPdfTable() {
   doc.text("PC Build Matrix – Parts Summary", 40, 40);
   doc.autoTable({
     startY: 60,
-    head: [["Category","Part","Price","Vendor","Order #","Warranty Owner","Start Date","End Date"]],
+    head: [["Category","Part","Price","Vendor","Order #",
+            "Warranty Owner","Start Date","End Date"]],
     body: source.map((p) => [
-      p.Category, [p.PartName, p.Model].filter(Boolean).join(" — "),
+      p.Category,
+      [p.PartName, p.Model].filter(Boolean).join(" — "),
       formatPrice(p), p.VendorName, p.OrderID,
       p.WarrantyProvider, p.WarrantyStartDate, p.WarrantyEndDate
     ]),
-    styles: { fontSize: 8, cellPadding: 3 },
+    styles:     { fontSize: 8, cellPadding: 3 },
     headStyles: { fillColor: [0, 200, 150] },
   });
   doc.save("pc_parts_table.pdf");
@@ -243,7 +299,7 @@ function downloadPdfTable() {
    EVENT LISTENERS
    ======================================== */
 
-// Row click: select row or open notes modal on Category cell
+// Row click: category cell → notes modal; rest of row → populate form
 tableBody.addEventListener("click", (e) => {
   const categoryCell = e.target.closest(".category-cell");
   if (categoryCell && categoryCell.dataset.notesIndex !== undefined) {
@@ -262,6 +318,17 @@ tableBody.addEventListener("click", (e) => {
   populateFormFromPart(parts[idx]);
 });
 
+// Per-field copy buttons (delegated)
+form.addEventListener("click", (e) => {
+  const btn = e.target.closest(".copy-field-btn");
+  if (!btn) return;
+  e.preventDefault();
+  copyField(btn.dataset.field);
+});
+
+// Copy-all button
+copyAllBtn.addEventListener("click", copyAllForm);
+
 searchInput.addEventListener("input", applyFilters);
 categoryFilter.addEventListener("change", applyFilters);
 
@@ -273,10 +340,12 @@ form.addEventListener("submit", (e) => {
     parts[selectedIndex] = { ...parts[selectedIndex], ...obj };
   } else {
     const idx = parts.findIndex(
-      (p) => p.Category === obj.Category && p.PartName === obj.PartName && p.Model === obj.Model
+      (p) => p.Category === obj.Category &&
+             p.PartName === obj.PartName &&
+             p.Model    === obj.Model
     );
     if (idx >= 0) {
-      parts[idx] = { ...parts[idx], ...obj };
+      parts[idx]    = { ...parts[idx], ...obj };
       selectedIndex = idx;
     } else {
       if (parts.length) {
