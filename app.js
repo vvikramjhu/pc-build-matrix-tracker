@@ -258,7 +258,7 @@ document.getElementById('download-pdf').addEventListener('click', () => {
     head: [['Category', 'Part', 'Price', 'Vendor', 'Order #', 'Warranty', 'Start', 'End']],
     body: tableData,
     theme: 'grid',
-    styles: { fontSize: 8 }
+    styles: { fontSize: 12 }
   });
   
   doc.save('pc_build_report.pdf');
