@@ -7,13 +7,10 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <!-- MATRIX BACKGROUND -->
     <div class="matrix-bg"></div>
 
-    <!-- APP SHELL -->
     <div class="app-shell">
 
-      <!-- HEADER -->
       <header class="app-header">
         <div class="logo-lockup">
           <div class="logo-mark">λ</div>
@@ -26,237 +23,284 @@
         </div>
       </header>
 
-      <!-- MAIN LAYOUT -->
       <main class="app-main">
 
         <!-- LEFT PANEL: Form -->
         <section class="panel panel-left">
 
-          <!-- Panel title + copy-all icon -->
           <div class="panel-title-row">
             <h2 class="panel-title">Part &amp; Warranty Editor</h2>
-            <button
-              type="button"
-              id="copy-all-form"
-              class="copy-all-btn"
-              title="Copy entire form"
-            >&#x2398; Copy All</button>
+            <button type="button" id="copy-all-form" class="copy-all-btn" title="Copy entire form">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              Copy All
+            </button>
           </div>
 
           <form id="part-form" class="matrix-form">
             <div class="form-grid">
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="Category">Category</label>
-                  <button type="button" class="copy-field-btn" data-field="Category" title="Copy">&#x2398;</button>
+                <label for="Category">Category</label>
+                <div class="input-row">
+                  <input id="Category" name="Category" placeholder="CPU, GPU, etc." />
+                  <button type="button" class="copy-field-btn" data-field="Category" title="Copy Category">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="Category" name="Category" placeholder="CPU, GPU, etc." />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="PartName">Part Name *</label>
-                  <button type="button" class="copy-field-btn" data-field="PartName" title="Copy">&#x2398;</button>
+                <label for="PartName">Part Name *</label>
+                <div class="input-row">
+                  <input id="PartName" name="PartName" placeholder="e.g. AMD Ryzen 9 9950X3D" required />
+                  <button type="button" class="copy-field-btn" data-field="PartName" title="Copy Part Name">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="PartName" name="PartName" placeholder="e.g. AMD Ryzen 9 9950X3D" required />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="Model">Model</label>
-                  <button type="button" class="copy-field-btn" data-field="Model" title="Copy">&#x2398;</button>
+                <label for="Model">Model</label>
+                <div class="input-row">
+                  <input id="Model" name="Model" placeholder="Model / Capacity" />
+                  <button type="button" class="copy-field-btn" data-field="Model" title="Copy Model">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="Model" name="Model" placeholder="Model / Capacity" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="VendorName">Vendor Name</label>
-                  <button type="button" class="copy-field-btn" data-field="VendorName" title="Copy">&#x2398;</button>
+                <label for="VendorName">Vendor Name</label>
+                <div class="input-row">
+                  <input id="VendorName" name="VendorName" placeholder="Amazon, Newegg..." />
+                  <button type="button" class="copy-field-btn" data-field="VendorName" title="Copy Vendor Name">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="VendorName" name="VendorName" placeholder="Amazon, Newegg..." />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="VendorWebsite">Vendor Website</label>
-                  <button type="button" class="copy-field-btn" data-field="VendorWebsite" title="Copy">&#x2398;</button>
+                <label for="VendorWebsite">Vendor Website</label>
+                <div class="input-row">
+                  <input id="VendorWebsite" name="VendorWebsite" placeholder="https://..." />
+                  <button type="button" class="copy-field-btn" data-field="VendorWebsite" title="Copy Vendor Website">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="VendorWebsite" name="VendorWebsite" placeholder="https://..." />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="VendorUsername">Vendor Username</label>
-                  <button type="button" class="copy-field-btn" data-field="VendorUsername" title="Copy">&#x2398;</button>
+                <label for="VendorUsername">Vendor Username</label>
+                <div class="input-row">
+                  <input id="VendorUsername" name="VendorUsername" />
+                  <button type="button" class="copy-field-btn" data-field="VendorUsername" title="Copy Vendor Username">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="VendorUsername" name="VendorUsername" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="VendorPasswordHint">Vendor Password Hint</label>
-                  <button type="button" class="copy-field-btn" data-field="VendorPasswordHint" title="Copy">&#x2398;</button>
+                <label for="VendorPasswordHint">Vendor Password Hint</label>
+                <div class="input-row">
+                  <input id="VendorPasswordHint" name="VendorPasswordHint" />
+                  <button type="button" class="copy-field-btn" data-field="VendorPasswordHint" title="Copy Password Hint">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="VendorPasswordHint" name="VendorPasswordHint" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="PurchaseDate">Purchase Date</label>
-                  <button type="button" class="copy-field-btn" data-field="PurchaseDate" title="Copy">&#x2398;</button>
+                <label for="PurchaseDate">Purchase Date</label>
+                <div class="input-row">
+                  <input id="PurchaseDate" name="PurchaseDate" type="date" />
+                  <button type="button" class="copy-field-btn" data-field="PurchaseDate" title="Copy Purchase Date">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="PurchaseDate" name="PurchaseDate" type="date" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="PricePaid">Price Paid</label>
-                  <button type="button" class="copy-field-btn" data-field="PricePaid" title="Copy">&#x2398;</button>
+                <label for="PricePaid">Price Paid</label>
+                <div class="input-row">
+                  <input id="PricePaid" name="PricePaid" type="number" step="0.01" />
+                  <button type="button" class="copy-field-btn" data-field="PricePaid" title="Copy Price">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="PricePaid" name="PricePaid" type="number" step="0.01" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="Currency">Currency</label>
-                  <button type="button" class="copy-field-btn" data-field="Currency" title="Copy">&#x2398;</button>
+                <label for="Currency">Currency</label>
+                <div class="input-row">
+                  <input id="Currency" name="Currency" placeholder="USD, EUR..." />
+                  <button type="button" class="copy-field-btn" data-field="Currency" title="Copy Currency">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="Currency" name="Currency" placeholder="USD, EUR..." />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="OrderID">Order ID</label>
-                  <button type="button" class="copy-field-btn" data-field="OrderID" title="Copy">&#x2398;</button>
+                <label for="OrderID">Order ID</label>
+                <div class="input-row">
+                  <input id="OrderID" name="OrderID" />
+                  <button type="button" class="copy-field-btn" data-field="OrderID" title="Copy Order ID">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="OrderID" name="OrderID" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="SerialNumber">Serial Number</label>
-                  <button type="button" class="copy-field-btn" data-field="SerialNumber" title="Copy">&#x2398;</button>
+                <label for="SerialNumber">Serial Number</label>
+                <div class="input-row">
+                  <input id="SerialNumber" name="SerialNumber" />
+                  <button type="button" class="copy-field-btn" data-field="SerialNumber" title="Copy Serial Number">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="SerialNumber" name="SerialNumber" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="WarrantyProvider">Warranty Provider</label>
-                  <button type="button" class="copy-field-btn" data-field="WarrantyProvider" title="Copy">&#x2398;</button>
+                <label for="WarrantyProvider">Warranty Provider</label>
+                <div class="input-row">
+                  <input id="WarrantyProvider" name="WarrantyProvider" />
+                  <button type="button" class="copy-field-btn" data-field="WarrantyProvider" title="Copy Warranty Provider">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="WarrantyProvider" name="WarrantyProvider" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="WarrantyType">Warranty Type</label>
-                  <button type="button" class="copy-field-btn" data-field="WarrantyType" title="Copy">&#x2398;</button>
+                <label for="WarrantyType">Warranty Type</label>
+                <div class="input-row">
+                  <input id="WarrantyType" name="WarrantyType" />
+                  <button type="button" class="copy-field-btn" data-field="WarrantyType" title="Copy Warranty Type">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="WarrantyType" name="WarrantyType" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="WarrantyRegistrationURL">Warranty Registration URL</label>
-                  <button type="button" class="copy-field-btn" data-field="WarrantyRegistrationURL" title="Copy">&#x2398;</button>
+                <label for="WarrantyRegistrationURL">Warranty Registration URL</label>
+                <div class="input-row">
+                  <input id="WarrantyRegistrationURL" name="WarrantyRegistrationURL" placeholder="https://..." />
+                  <button type="button" class="copy-field-btn" data-field="WarrantyRegistrationURL" title="Copy Registration URL">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="WarrantyRegistrationURL" name="WarrantyRegistrationURL" placeholder="https://..." />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="WarrantyLengthMonths">Warranty Length (months)</label>
-                  <button type="button" class="copy-field-btn" data-field="WarrantyLengthMonths" title="Copy">&#x2398;</button>
+                <label for="WarrantyLengthMonths">Warranty Length (months)</label>
+                <div class="input-row">
+                  <input id="WarrantyLengthMonths" name="WarrantyLengthMonths" type="number" />
+                  <button type="button" class="copy-field-btn" data-field="WarrantyLengthMonths" title="Copy Warranty Length">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="WarrantyLengthMonths" name="WarrantyLengthMonths" type="number" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="WarrantyStartDate">Warranty Start Date</label>
-                  <button type="button" class="copy-field-btn" data-field="WarrantyStartDate" title="Copy">&#x2398;</button>
+                <label for="WarrantyStartDate">Warranty Start Date</label>
+                <div class="input-row">
+                  <input id="WarrantyStartDate" name="WarrantyStartDate" type="date" />
+                  <button type="button" class="copy-field-btn" data-field="WarrantyStartDate" title="Copy Warranty Start Date">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="WarrantyStartDate" name="WarrantyStartDate" type="date" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="WarrantyEndDate">Warranty End Date</label>
-                  <button type="button" class="copy-field-btn" data-field="WarrantyEndDate" title="Copy">&#x2398;</button>
+                <label for="WarrantyEndDate">Warranty End Date</label>
+                <div class="input-row">
+                  <input id="WarrantyEndDate" name="WarrantyEndDate" type="date" />
+                  <button type="button" class="copy-field-btn" data-field="WarrantyEndDate" title="Copy Warranty End Date">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="WarrantyEndDate" name="WarrantyEndDate" type="date" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="WarrantySupportEmail">Warranty Support Email</label>
-                  <button type="button" class="copy-field-btn" data-field="WarrantySupportEmail" title="Copy">&#x2398;</button>
+                <label for="WarrantySupportEmail">Warranty Support Email</label>
+                <div class="input-row">
+                  <input id="WarrantySupportEmail" name="WarrantySupportEmail" />
+                  <button type="button" class="copy-field-btn" data-field="WarrantySupportEmail" title="Copy Warranty Support Email">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="WarrantySupportEmail" name="WarrantySupportEmail" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="WarrantySupportPhone">Warranty Support Phone</label>
-                  <button type="button" class="copy-field-btn" data-field="WarrantySupportPhone" title="Copy">&#x2398;</button>
+                <label for="WarrantySupportPhone">Warranty Support Phone</label>
+                <div class="input-row">
+                  <input id="WarrantySupportPhone" name="WarrantySupportPhone" />
+                  <button type="button" class="copy-field-btn" data-field="WarrantySupportPhone" title="Copy Warranty Support Phone">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="WarrantySupportPhone" name="WarrantySupportPhone" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="ExtendedWarrantyProvider">Ext. Warranty Provider</label>
-                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantyProvider" title="Copy">&#x2398;</button>
+                <label for="ExtendedWarrantyProvider">Ext. Warranty Provider</label>
+                <div class="input-row">
+                  <input id="ExtendedWarrantyProvider" name="ExtendedWarrantyProvider" />
+                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantyProvider" title="Copy Ext. Warranty Provider">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="ExtendedWarrantyProvider" name="ExtendedWarrantyProvider" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="ExtendedWarrantyLengthMonths">Ext. Warranty Length (months)</label>
-                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantyLengthMonths" title="Copy">&#x2398;</button>
+                <label for="ExtendedWarrantyLengthMonths">Ext. Warranty Length (months)</label>
+                <div class="input-row">
+                  <input id="ExtendedWarrantyLengthMonths" name="ExtendedWarrantyLengthMonths" type="number" />
+                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantyLengthMonths" title="Copy Ext. Warranty Length">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="ExtendedWarrantyLengthMonths" name="ExtendedWarrantyLengthMonths" type="number" />
               </div>
 
               <div class="form-group form-group-full">
-                <div class="field-label-row">
-                  <label for="ExtendedWarrantyDetails">Ext. Warranty Details</label>
-                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantyDetails" title="Copy">&#x2398;</button>
+                <label for="ExtendedWarrantyDetails">Ext. Warranty Details</label>
+                <div class="input-row input-row-textarea">
+                  <textarea id="ExtendedWarrantyDetails" name="ExtendedWarrantyDetails" rows="2"></textarea>
+                  <button type="button" class="copy-field-btn copy-field-btn-textarea" data-field="ExtendedWarrantyDetails" title="Copy Ext. Warranty Details">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <textarea id="ExtendedWarrantyDetails" name="ExtendedWarrantyDetails" rows="2"></textarea>
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="ExtendedWarrantySupportEmail">Ext. Warranty Support Email</label>
-                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantySupportEmail" title="Copy">&#x2398;</button>
+                <label for="ExtendedWarrantySupportEmail">Ext. Warranty Support Email</label>
+                <div class="input-row">
+                  <input id="ExtendedWarrantySupportEmail" name="ExtendedWarrantySupportEmail" />
+                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantySupportEmail" title="Copy Ext. Warranty Support Email">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="ExtendedWarrantySupportEmail" name="ExtendedWarrantySupportEmail" />
               </div>
 
               <div class="form-group">
-                <div class="field-label-row">
-                  <label for="ExtendedWarrantySupportPhone">Ext. Warranty Support Phone</label>
-                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantySupportPhone" title="Copy">&#x2398;</button>
+                <label for="ExtendedWarrantySupportPhone">Ext. Warranty Support Phone</label>
+                <div class="input-row">
+                  <input id="ExtendedWarrantySupportPhone" name="ExtendedWarrantySupportPhone" />
+                  <button type="button" class="copy-field-btn" data-field="ExtendedWarrantySupportPhone" title="Copy Ext. Warranty Support Phone">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <input id="ExtendedWarrantySupportPhone" name="ExtendedWarrantySupportPhone" />
               </div>
 
               <div class="form-group form-group-full">
-                <div class="field-label-row">
-                  <label for="Notes">Notes</label>
-                  <button type="button" class="copy-field-btn" data-field="Notes" title="Copy">&#x2398;</button>
+                <label for="Notes">Notes</label>
+                <div class="input-row input-row-textarea">
+                  <textarea id="Notes" name="Notes" rows="2"></textarea>
+                  <button type="button" class="copy-field-btn copy-field-btn-textarea" data-field="Notes" title="Copy Notes">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
                 </div>
-                <textarea id="Notes" name="Notes" rows="2"></textarea>
               </div>
 
             </div>
 
-            <!-- FORM ACTIONS -->
             <div class="form-actions">
               <button type="submit" class="btn-primary">Save (Add / Update)</button>
               <button type="button" id="reset-form" class="btn-secondary">New / Clear</button>
@@ -267,7 +311,6 @@
 
         <!-- RIGHT PANEL: Table -->
         <section class="panel panel-right">
-
           <div class="panel-header">
             <h2 class="panel-title">Parts Matrix</h2>
             <div class="panel-controls">
