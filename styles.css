@@ -24,7 +24,7 @@
 }
 
 /* ========================================
-   GLOBAL RESET
+   GLOBAL RESET & BASE STYLES
    ======================================== */
 *,
 *::before,
@@ -46,41 +46,7 @@ body {
 }
 
 /* ========================================
-   GLOBAL INPUT/SELECT/TEXTAREA RESET
-   Strip ALL default borders/backgrounds so
-   .input-row is the sole visual container
-   ======================================== */
-input,
-select,
-textarea {
-  background: transparent;
-  color: var(--fg);
-  border: none;
-  border-radius: 0;
-  padding: 0.25rem 0.45rem;
-  font-size: 0.75rem;
-  outline: none;
-  box-shadow: none;
-  width: 100%;
-  font-family: var(--font-sans);
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  box-shadow: none;
-  border: none;
-}
-
-textarea {
-  resize: none;
-  min-height: 1.8rem;
-  max-height: 3rem;
-}
-
-/* ========================================
-   THIN SCROLLBAR — only form + table
+   THIN SCROLLBAR — only on elements that scroll
    ======================================== */
 .matrix-form::-webkit-scrollbar,
 .table-wrapper::-webkit-scrollbar {
@@ -101,6 +67,8 @@ textarea {
 .table-wrapper::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover);
 }
+
+/* Firefox */
 .matrix-form,
 .table-wrapper {
   scrollbar-width: thin;
@@ -116,7 +84,7 @@ body::-webkit-scrollbar,
 }
 
 /* ========================================
-   MATRIX BACKGROUND
+   MATRIX BACKGROUND OVERLAY
    ======================================== */
 .matrix-bg {
   position: fixed;
@@ -205,7 +173,7 @@ body::-webkit-scrollbar,
 }
 
 /* ========================================
-   MAIN LAYOUT
+   MAIN LAYOUT: two-column grid
    ======================================== */
 .app-main {
   flex: 1 1 auto;
@@ -213,6 +181,7 @@ body::-webkit-scrollbar,
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.4fr);
   gap: var(--grid-gap);
+  /* KEY: give app-main a fixed height so children can scroll */
   height: calc(100vh - 80px);
   min-height: 0;
   overflow: hidden;
@@ -229,6 +198,7 @@ body::-webkit-scrollbar,
   padding: 0.8rem;
   display: flex;
   flex-direction: column;
+  /* KEY: panels must have a fixed height to allow inner scroll */
   height: 100%;
   overflow: hidden;
 }
@@ -243,59 +213,18 @@ body::-webkit-scrollbar,
 }
 
 /* ========================================
-   PANEL TITLE ROW
-   ======================================== */
-.panel-title-row {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.4rem;
-}
-
-.panel-title-row .panel-title {
-  margin: 0;
-}
-
-/* Copy-all button */
-.copy-all-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-  font-size: 0.68rem;
-  padding: 0.2rem 0.55rem;
-  border-radius: 999px;
-  border: 1px solid rgba(0, 255, 154, 0.25);
-  background: transparent;
-  color: rgba(0, 255, 154, 0.3);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: color 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
-}
-
-.copy-all-btn svg {
-  stroke: rgba(0, 255, 154, 0.3);
-  transition: stroke 0.2s;
-}
-
-.copy-all-btn:hover {
-  color: var(--accent);
-  border-color: rgba(0, 255, 154, 0.8);
-  background: rgba(0, 255, 154, 0.08);
-  box-shadow: 0 0 8px rgba(0, 255, 154, 0.3);
-}
-
-.copy-all-btn:hover svg {
-  stroke: var(--accent);
-}
-
-/* ========================================
    LEFT PANEL: FORM
+   The form itself scrolls; panel-title and form-actions are fixed
    ======================================== */
+.panel-left {
+  /* panel already has height:100% and overflow:hidden */
+}
+
+/* Scrollable form area — takes remaining height after title & actions */
 .matrix-form {
   flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
+  min-height: 0;        /* KEY: allows flex child to shrink below content size */
+  overflow-y: auto;     /* scrollbar appears when content overflows */
   overflow-x: hidden;
   padding-right: 0.4rem;
 }
@@ -321,97 +250,32 @@ label {
   margin-bottom: 0.1rem;
 }
 
-/* ========================================
-   INPUT ROW — the SOLE visual container
-   Input + icon live inside this box.
-   No border/bg on the input itself.
-   ======================================== */
-.input-row {
-  display: flex;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.55);
+input,
+select,
+textarea {
+  background: rgba(0, 0, 0, 0.5);
+  color: var(--fg);
   border-radius: var(--radius-sm);
   border: 1px solid rgba(0, 255, 154, 0.22);
-  transition: border-color 0.15s, box-shadow 0.15s;
-  overflow: hidden;        /* clip children to rounded corners */
-}
-
-.input-row:focus-within {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px rgba(0, 255, 154, 0.35);
-}
-
-/* Input fills the row — no own border, no own bg */
-.input-row input,
-.input-row select,
-.input-row textarea {
-  flex: 1 1 auto;
-  min-width: 0;
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  outline: none !important;
-  padding: 0.28rem 0.3rem 0.28rem 0.45rem;
+  padding: 0.25rem 0.45rem;
   font-size: 0.75rem;
-  color: var(--fg);
-  width: auto;
+  outline: none;
 }
 
-/* Textarea variant */
-.input-row-textarea {
-  align-items: flex-start;
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px rgba(0, 255, 154, 0.4);
 }
 
-.input-row-textarea textarea {
+textarea {
+  resize: none;
   min-height: 1.8rem;
   max-height: 3rem;
-  resize: none;
 }
 
-/* ========================================
-   COPY FIELD BUTTON
-   Lives INSIDE .input-row at the right edge.
-   Subdued matrix green by default,
-   bright matrix green on hover.
-   ======================================== */
-.copy-field-btn {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  margin-right: 3px;
-  background: transparent;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 0;
-  /* SVG stroke color — subdued green, NOT white */
-  color: rgba(0, 255, 154, 0.22);
-  transition: color 0.18s, background 0.18s, box-shadow 0.18s;
-}
-
-/* Force SVG to inherit the green color */
-.copy-field-btn svg {
-  stroke: currentColor;
-  fill: none;
-  display: block;
-}
-
-.copy-field-btn:hover {
-  color: var(--accent);
-  background: rgba(0, 255, 154, 0.1);
-  box-shadow: 0 0 6px rgba(0, 255, 154, 0.4);
-}
-
-/* Textarea copy button aligns to top */
-.copy-field-btn-textarea {
-  align-self: flex-start;
-  margin-top: 3px;
-}
-
-/* Form actions pinned at bottom */
+/* Form actions pinned at bottom of left panel */
 .form-actions {
   flex: 0 0 auto;
   display: flex;
@@ -477,7 +341,7 @@ label {
 }
 
 /* ========================================
-   RIGHT PANEL HEADER
+   RIGHT PANEL: HEADER CONTROLS
    ======================================== */
 .panel-header {
   flex: 0 0 auto;
@@ -497,28 +361,10 @@ label {
 .search-input {
   min-width: 0;
   flex: 1 1 150px;
-  /* search input needs its own border since it's not in .input-row */
-  background: rgba(0,0,0,0.5) !important;
-  border: 1px solid rgba(0, 255, 154, 0.22) !important;
-  border-radius: var(--radius-sm) !important;
-  padding: 0.25rem 0.45rem !important;
-}
-
-.search-input:focus {
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 0 1px rgba(0, 255, 154, 0.35) !important;
 }
 
 .filter-select {
   width: 130px;
-  background: rgba(0,0,0,0.5) !important;
-  border: 1px solid rgba(0, 255, 154, 0.22) !important;
-  border-radius: var(--radius-sm) !important;
-  padding: 0.25rem 0.45rem !important;
-}
-
-.filter-select:focus {
-  border-color: var(--accent) !important;
 }
 
 .table-actions {
@@ -529,14 +375,16 @@ label {
 
 /* ========================================
    TABLE WRAPPER
+   KEY: flex:1 + min-height:0 forces it to fill remaining panel height
+   overflow:auto triggers the scrollbar when rows exceed the height
    ======================================== */
 .table-wrapper {
   flex: 1 1 auto;
-  min-height: 0;
+  min-height: 0;        /* KEY: must be set for flex child to scroll */
   border-radius: var(--radius-md);
   border: 1px solid rgba(0, 255, 154, 0.18);
   background: radial-gradient(circle at top left, #07141a 0, #020609 60%);
-  overflow: auto;
+  overflow: auto;       /* scrollbar appears when rows overflow */
 }
 
 /* ========================================
@@ -549,6 +397,7 @@ label {
   font-size: 0.72rem;
 }
 
+/* Sticky header so it stays visible while scrolling */
 .matrix-table thead {
   position: sticky;
   top: 0;
@@ -582,7 +431,7 @@ label {
   vertical-align: top;
 }
 
-/* Category (col 1) and Price (col 3): normal size */
+/* Category (col 1) and Price (col 3): normal size, no wrap */
 .matrix-table tbody td:nth-child(1),
 .matrix-table tbody td:nth-child(3) {
   font-size: 0.72rem;
@@ -717,9 +566,9 @@ tbody tr.selected-row {
   width: 100%;
   margin-top: 0.2rem;
   margin-bottom: 0.6rem;
-  background: rgba(0, 0, 0, 0.4) !important;
+  background: rgba(0, 0, 0, 0.4);
   border-radius: 6px;
-  border: 1px solid var(--accent-muted) !important;
+  border: 1px solid var(--accent-muted);
   color: var(--fg);
   resize: none;
   min-height: 4rem;
@@ -741,27 +590,6 @@ tbody tr.selected-row {
   display: flex;
   justify-content: flex-end;
   gap: 0.4rem;
-}
-
-/* ========================================
-   COPY TOAST
-   ======================================== */
-.copy-toast {
-  position: fixed;
-  bottom: 1.2rem;
-  right: 1.2rem;
-  background: rgba(0, 255, 154, 0.1);
-  border: 1px solid rgba(0, 255, 154, 0.5);
-  color: var(--accent);
-  padding: 0.35rem 0.8rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  z-index: 999;
-  pointer-events: none;
-}
-
-.copy-toast.hidden {
-  display: none;
 }
 
 /* ========================================
