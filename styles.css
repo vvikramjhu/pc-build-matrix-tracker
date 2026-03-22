@@ -46,6 +46,40 @@ body {
 }
 
 /* ========================================
+   GLOBAL INPUT/SELECT/TEXTAREA RESET
+   Strip ALL default borders/backgrounds so
+   .input-row is the sole visual container
+   ======================================== */
+input,
+select,
+textarea {
+  background: transparent;
+  color: var(--fg);
+  border: none;
+  border-radius: 0;
+  padding: 0.25rem 0.45rem;
+  font-size: 0.75rem;
+  outline: none;
+  box-shadow: none;
+  width: 100%;
+  font-family: var(--font-sans);
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+
+textarea {
+  resize: none;
+  min-height: 1.8rem;
+  max-height: 3rem;
+}
+
+/* ========================================
    THIN SCROLLBAR — only form + table
    ======================================== */
 .matrix-form::-webkit-scrollbar,
@@ -209,7 +243,7 @@ body::-webkit-scrollbar,
 }
 
 /* ========================================
-   PANEL TITLE ROW (title + copy-all)
+   PANEL TITLE ROW
    ======================================== */
 .panel-title-row {
   flex: 0 0 auto;
@@ -233,11 +267,15 @@ body::-webkit-scrollbar,
   border-radius: 999px;
   border: 1px solid rgba(0, 255, 154, 0.25);
   background: transparent;
-  color: rgba(0, 255, 154, 0.35);   /* subdued by default */
+  color: rgba(0, 255, 154, 0.3);
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.2s, border-color 0.2s, background 0.2s,
-              box-shadow 0.2s;
+  transition: color 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.copy-all-btn svg {
+  stroke: rgba(0, 255, 154, 0.3);
+  transition: stroke 0.2s;
 }
 
 .copy-all-btn:hover {
@@ -245,6 +283,10 @@ body::-webkit-scrollbar,
   border-color: rgba(0, 255, 154, 0.8);
   background: rgba(0, 255, 154, 0.08);
   box-shadow: 0 0 8px rgba(0, 255, 154, 0.3);
+}
+
+.copy-all-btn:hover svg {
+  stroke: var(--accent);
 }
 
 /* ========================================
@@ -280,37 +322,39 @@ label {
 }
 
 /* ========================================
-   INPUT ROW: input + copy icon side by side
-   The copy icon sits INSIDE the row, flush right
+   INPUT ROW — the SOLE visual container
+   Input + icon live inside this box.
+   No border/bg on the input itself.
    ======================================== */
 .input-row {
   display: flex;
   align-items: center;
-  position: relative;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.55);
   border-radius: var(--radius-sm);
   border: 1px solid rgba(0, 255, 154, 0.22);
   transition: border-color 0.15s, box-shadow 0.15s;
+  overflow: hidden;        /* clip children to rounded corners */
 }
 
-/* When the input inside is focused, highlight the whole row */
 .input-row:focus-within {
   border-color: var(--accent);
-  box-shadow: 0 0 0 1px rgba(0, 255, 154, 0.4);
+  box-shadow: 0 0 0 1px rgba(0, 255, 154, 0.35);
 }
 
-/* Input fills the row, no own border/bg (row provides it) */
+/* Input fills the row — no own border, no own bg */
 .input-row input,
-.input-row select {
+.input-row select,
+.input-row textarea {
   flex: 1 1 auto;
   min-width: 0;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0.25rem 0.3rem 0.25rem 0.45rem;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0.28rem 0.3rem 0.28rem 0.45rem;
   font-size: 0.75rem;
   color: var(--fg);
-  outline: none;
+  width: auto;
 }
 
 /* Textarea variant */
@@ -319,23 +363,16 @@ label {
 }
 
 .input-row-textarea textarea {
-  flex: 1 1 auto;
-  min-width: 0;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0.25rem 0.3rem 0.25rem 0.45rem;
-  font-size: 0.75rem;
-  color: var(--fg);
-  outline: none;
-  resize: none;
   min-height: 1.8rem;
   max-height: 3rem;
+  resize: none;
 }
 
 /* ========================================
-   COPY FIELD BUTTON — inside the input row
-   Subdued by default, bright on hover
+   COPY FIELD BUTTON
+   Lives INSIDE .input-row at the right edge.
+   Subdued matrix green by default,
+   bright matrix green on hover.
    ======================================== */
 .copy-field-btn {
   flex: 0 0 auto;
@@ -344,70 +381,34 @@ label {
   justify-content: center;
   width: 22px;
   height: 22px;
-  margin-right: 2px;
+  margin-right: 3px;
   background: transparent;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   padding: 0;
-  /* Subdued: very low opacity green tint */
-  color: rgba(0, 255, 154, 0.2);
+  /* SVG stroke color — subdued green, NOT white */
+  color: rgba(0, 255, 154, 0.22);
   transition: color 0.18s, background 0.18s, box-shadow 0.18s;
+}
+
+/* Force SVG to inherit the green color */
+.copy-field-btn svg {
+  stroke: currentColor;
+  fill: none;
+  display: block;
 }
 
 .copy-field-btn:hover {
   color: var(--accent);
   background: rgba(0, 255, 154, 0.1);
-  box-shadow: 0 0 6px rgba(0, 255, 154, 0.35);
+  box-shadow: 0 0 6px rgba(0, 255, 154, 0.4);
 }
 
 /* Textarea copy button aligns to top */
 .copy-field-btn-textarea {
   align-self: flex-start;
   margin-top: 3px;
-}
-
-/* Remove old standalone input/textarea styles (now handled by .input-row) */
-input,
-select,
-textarea {
-  background: rgba(0, 0, 0, 0.5);
-  color: var(--fg);
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(0, 255, 154, 0.22);
-  padding: 0.25rem 0.45rem;
-  font-size: 0.75rem;
-  outline: none;
-}
-
-/* Override for inputs inside .input-row */
-.input-row input,
-.input-row select,
-.input-row textarea {
-  background: transparent;
-  border: none;
-  box-shadow: none;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px rgba(0, 255, 154, 0.4);
-}
-
-/* Inputs inside .input-row don't need their own focus ring */
-.input-row input:focus,
-.input-row select:focus,
-.input-row textarea:focus {
-  border: none;
-  box-shadow: none;
-}
-
-textarea {
-  resize: none;
-  min-height: 1.8rem;
-  max-height: 3rem;
 }
 
 /* Form actions pinned at bottom */
@@ -496,10 +497,28 @@ textarea {
 .search-input {
   min-width: 0;
   flex: 1 1 150px;
+  /* search input needs its own border since it's not in .input-row */
+  background: rgba(0,0,0,0.5) !important;
+  border: 1px solid rgba(0, 255, 154, 0.22) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0.25rem 0.45rem !important;
+}
+
+.search-input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 1px rgba(0, 255, 154, 0.35) !important;
 }
 
 .filter-select {
   width: 130px;
+  background: rgba(0,0,0,0.5) !important;
+  border: 1px solid rgba(0, 255, 154, 0.22) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0.25rem 0.45rem !important;
+}
+
+.filter-select:focus {
+  border-color: var(--accent) !important;
 }
 
 .table-actions {
@@ -698,9 +717,9 @@ tbody tr.selected-row {
   width: 100%;
   margin-top: 0.2rem;
   margin-bottom: 0.6rem;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.4) !important;
   border-radius: 6px;
-  border: 1px solid var(--accent-muted);
+  border: 1px solid var(--accent-muted) !important;
   color: var(--fg);
   resize: none;
   min-height: 4rem;
