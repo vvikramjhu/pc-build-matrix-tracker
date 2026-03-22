@@ -598,7 +598,7 @@ label {
 .matrix-table tbody td:nth-child(6),
 .matrix-table tbody td:nth-child(7),
 .matrix-table tbody td:nth-child(8) {
-  font-size: 0.5rem;
+  font-size: 0.7rem;
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
