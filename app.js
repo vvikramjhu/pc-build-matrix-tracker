@@ -64,7 +64,7 @@ const notesTitle      = document.querySelector("#notes-title");
    ======================================== */
 async function loadData() {
   try {
-    const res = await fetch("data/pc_parts.csv");
+    const res = await fetch(`data/pc_parts.csv?v=${Date.now()}`);
     if (!res.ok) throw new Error("Failed to load CSV");
     const text = await res.text();
     parts = parseCSV(text);
